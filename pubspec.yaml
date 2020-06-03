@@ -1,0 +1,25 @@
+name: flutter_login_vk
+description: Login via Vk.
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.12.13"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: ru.innim.flutter_login_vk
+        pluginClass: FlutterLoginVkPlugin
+      ios:
+        pluginClass: FlutterLoginVkPlugin
