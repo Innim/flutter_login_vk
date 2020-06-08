@@ -1,7 +1,9 @@
 name: flutter_login_vk
 description: Login via Vk.
-version: 0.0.1
-homepage:
+version: 0.1.0
+homepage: https://github.com/Innim/flutter_login_vk
+repository: https://github.com/Innim/flutter_login_vk
+issue_tracker: https://github.com/Innim/flutter_login_vk/issues
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
