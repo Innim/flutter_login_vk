@@ -108,6 +108,7 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
     private func logOut(result: @escaping FlutterResult) {
         VKSdk.forceLogout()
         _sdk = nil
+        result(nil)
     }
     
     private func getAccessToken(result: @escaping FlutterResult) {
