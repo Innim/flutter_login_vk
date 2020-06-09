@@ -1,5 +1,6 @@
 import Flutter
 import UIKit
+import VK_ios_sdk
 
 /// Plugin methods.
 enum PluginMethod: String {
@@ -20,7 +21,9 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "flutter_login_vk", binaryMessenger: registrar.messenger())
     let instance = SwiftFlutterLoginVkPlugin()
+        
     registrar.addMethodCallDelegate(instance, channel: channel)
+        registrar.addApplicationDelegate(instance)
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -64,6 +67,17 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
             getSdkVersion(result: result)
         }
   }
+    
+    // Application delegate
+    
+    public func application(_ application: UIApplication, open url: URL,
+                            options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        VKSdk.processOpen(
+            url,
+            fromApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String)
+        
+        return true;
+    }
     
     // Plugin methods impl
     

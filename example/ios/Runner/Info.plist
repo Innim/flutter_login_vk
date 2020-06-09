@@ -41,5 +41,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>vk</string>
+        <string>vk-share</string>
+        <string>vkauthorize</string>
+    </array>
 </dict>
 </plist>
