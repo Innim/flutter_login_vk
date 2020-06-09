@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 enum VKScope {
   friends,
   photos,
@@ -21,5 +23,5 @@ enum VKScope {
 
 extension VKScopeExtension on VKScope {
   /// Name of scope.
-  String get name => this.toString().split('.')[1];
+  String get name => describeEnum(this);
 }
