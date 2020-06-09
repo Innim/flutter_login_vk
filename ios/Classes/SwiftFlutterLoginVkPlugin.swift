@@ -103,6 +103,8 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
     }
     
     private func logIn(result: @escaping FlutterResult, permissions: [String]) {
+        _loginDelegate.startLogin(result: result)
+        VKSdk.authorize(permissions)
     }
     
     private func logOut(result: @escaping FlutterResult) {
@@ -204,8 +206,47 @@ class VkLogInDelegate : NSObject, VKSdkDelegate {
     // VKSdkDelegate
     
     func vkSdkAccessAuthorizationFinished(with result: VKAuthorizationResult!) {
+        if let pendingResult = _pendingResult {
+            _pendingResult = nil
+            let data: [String: Any];
+            if let token = result.token {
+                data = [
+                    "accessToken": token.toMap()
+                ]
+            } else if let error = result.error {
+                let nsError = error as NSError
+                if nsError.domain == VKSdkErrorDomain, let vkError = nsError.vkError {
+                    if vkError.isCanceled() {
+                        data = [
+                            "isCanceled": true
+                        ]
+                    } else {
+                        pendingResult(FlutterError.apiError(
+                            "Login failed: \(vkError.errorMessage ?? "nil")",
+                            details: vkError.toMap()))
+                        return
+                    }
+                    
+                    //                } else if nsError.domain == NSURLErrorDomain && nsError.code == NSURLErrorNotConnectedToInternet {
+                    //                    // TODO: handle NSURLErrorNotConnectedToInternet
+                } else {
+                    pendingResult(FlutterError.invalidResult(
+                        "Invalid login error: \(String(describing: error))"))
+                    return
+                }
+            } else {
+                pendingResult(FlutterError.invalidResult(
+                    "Invalid login result: \(String(describing: result))"))
+                return;
+            }
+            
+            pendingResult(data)
+        } else {
+            // it's auto auth, without authorize() call
+            // TODO: do something?
+            print("pending result is null")
+        }
     }
-
 }
 
 extension VKAccessToken {
@@ -263,6 +304,11 @@ extension FlutterError {
     
     static func apiUnavailable(_ message: String, details: Any? = nil) -> FlutterError {
         return FlutterError(code:  "API_UNAVAILABLE", message: message, details: details);
+    }
+    
+    /// Error as result of SDK API call.
+    static func apiError(_ message: String, details: Any? = nil) -> FlutterError {
+        return FlutterError(code:  "API_ERROR", message: message, details: details);
     }
 }
 
