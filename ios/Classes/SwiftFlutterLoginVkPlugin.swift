@@ -26,7 +26,7 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
         registrar.addApplicationDelegate(instance)
   }
 
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let method = PluginMethod(rawValue: call.method) else {
             result(FlutterMethodNotImplemented)
             return
@@ -38,9 +38,7 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
                 let args = call.arguments as? [String: Any],
                 let appIdArg = args[InitSdkArg.appId.rawValue] as? String
                 else {
-                    result(FlutterError(code: "INVALID_ARGS",
-                                        message: "Arguments is invalid",
-                                        details: nil))
+                    result(FlutterError.invalidArgs("Arguments is invalid"))
                     return
             }
             
@@ -50,9 +48,7 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
                 let args = call.arguments as? [String: Any],
                 let permissionsArg = args[LogInArg.scope.rawValue] as? [String]
                 else {
-                    result(FlutterError(code: "INVALID_ARGS",
-                                        message: "Arguments is invalid",
-                                        details: nil))
+                    result(FlutterError.invalidArgs("Arguments is invalid"))
                     return
             }
             
@@ -66,7 +62,7 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
         case .getSdkVersion:
             getSdkVersion(result: result)
         }
-  }
+    }
     
     // Application delegate
     
@@ -117,5 +113,14 @@ extension VKAccessToken {
             "httpsRequired": httpsRequired,
             "permissions": permissions,
         ]
+    }
+}
+extension FlutterError {
+    static func invalidArgs(_ message: String, details: Any? = nil) -> FlutterError {
+        return FlutterError(code:  "INVALID_ARGS", message: message, details: details);
+    }
+    
+    static func invalidResult(_ message: String, details: Any? = nil) -> FlutterError {
+        return FlutterError(code:  "INVALID_RESULT", message: message, details: details);
     }
 }
