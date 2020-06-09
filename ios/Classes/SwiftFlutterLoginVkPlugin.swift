@@ -210,6 +210,11 @@ extension VKError {
             "localizedMessage": localizedMessage,
         ]
     }
+    
+    func isCanceled() -> Bool {
+        return errorCode == VK_API_CANCELED ||
+            errorCode == VK_API_ERROR && errorReason == "user_denied"
+    }
 }
 
 extension FlutterError {
