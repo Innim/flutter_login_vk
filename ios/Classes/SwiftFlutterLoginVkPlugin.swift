@@ -187,6 +187,31 @@ extension VKAccessToken {
         ]
     }
 }
+
+extension VKError {
+    func toMap() -> [String: Any?] {
+        let apiCode: Int?
+        let message: String?
+        let localizedMessage: String?
+        
+        if errorCode == VK_API_ERROR, let apiError = self.apiError {
+            apiCode = apiError.errorCode
+            message = apiError.errorMessage
+            localizedMessage = apiError.errorText
+        } else {
+            apiCode = nil
+            message = errorMessage
+            localizedMessage = errorText
+        }
+        
+        return [
+            "apiCode": apiCode,
+            "message": message,
+            "localizedMessage": localizedMessage,
+        ]
+    }
+}
+
 extension FlutterError {
     static func invalidArgs(_ message: String, details: Any? = nil) -> FlutterError {
         return FlutterError(code:  "INVALID_ARGS", message: message, details: details);
