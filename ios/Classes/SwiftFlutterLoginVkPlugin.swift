@@ -112,9 +112,7 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
     
     private func getAccessToken(result: @escaping FlutterResult) {
         let token = VKSdk.accessToken()
-        result([
-            "accessToken": token?.toMap(),
-        ])
+        result(token?.toMap())
     }
     
     private func getUserProfile(result: @escaping FlutterResult) {
