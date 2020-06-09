@@ -3,6 +3,7 @@ package ru.innim.flutter_login_vk;
 import com.vk.sdk.api.VKError;
 
 public class Error {
+    // TODO @ivan: remove code
     public String code;
     public int apiCode;
     public String message;

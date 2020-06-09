@@ -1,21 +1,34 @@
 /// Error object from VK.
-///
-/// See https://vk.com/dev/ios_sdk?f=5.3.%20%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0%20%D0%BE%D1%88%D0%B8%D0%B1%D0%BE%D0%BA
 class VKError {
-  final String code;
+  /// VK API error code, if presented.
+  ///
+  /// See https://vk.com/dev/errors
   final int apiCode;
+
+  // TODO: rename message to description?
+
+  /// Error description, if presented.
+  ///
+  /// It' message for developer.
   final String message;
 
-  VKError({this.code, this.apiCode, this.message});
+  // TODO @ivan: add in android
+  /// Localized error message. Can be shown to user.
+  final String localizedMessage;
+
+  VKError({this.apiCode, this.message, this.localizedMessage});
 
   factory VKError.fromMap(Map<String, dynamic> map) => VKError(
-      code: map['code'], apiCode: map['apiCode'], message: map['message']);
+        apiCode: map['apiCode'],
+        message: map['message'],
+        localizedMessage: map['localizedMessage'],
+      );
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'code': code,
       'apiCode': apiCode,
       'message': message,
+      'localizedMessage': localizedMessage,
     };
   }
 
@@ -24,15 +37,16 @@ class VKError {
     if (identical(this, o)) return true;
 
     return o is VKError &&
-        o.code == code &&
         o.apiCode == apiCode &&
-        o.message == message;
+        o.message == message &&
+        o.localizedMessage == localizedMessage;
   }
 
   @override
-  int get hashCode => code.hashCode ^ apiCode.hashCode ^ message.hashCode;
+  int get hashCode =>
+      apiCode.hashCode ^ message.hashCode ^ localizedMessage.hashCode;
 
   @override
-  String toString() => 'VKError(code: $code, apiCode: $apiCode, '
-      'message: $message)';
+  String toString() => 'VKError(apiCode: $apiCode, '
+      'message: $message, localizedMessage: $localizedMessage)';
 }
