@@ -92,6 +92,10 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
     }
     
     private func getAccessToken(result: @escaping FlutterResult) {
+        let token = VKSdk.accessToken()
+        result([
+            "accessToken": token?.toMap(),
+        ])
     }
     
     private func getUserProfile(result: @escaping FlutterResult) {
@@ -100,3 +104,18 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
     private func getSdkVersion(result: @escaping FlutterResult) {
         result(VK_SDK_VERSION)
     }
+
+extension VKAccessToken {
+    func toMap() -> [String: Any?] {
+        return [
+            "token": accessToken,
+            "userId": userId,
+            "expiresIn": expiresIn,
+            "created": Int((created * 1000.0).rounded()),
+            "secret": secret,
+            "email": email,
+            "httpsRequired": httpsRequired,
+            "permissions": permissions,
+        ]
+    }
+}
