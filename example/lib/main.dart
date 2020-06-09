@@ -78,7 +78,7 @@ class _MyAppState extends State<MyApp> {
           'Online: ${profile.online}, Online mobile: ${profile.onlineMobile}',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        Image.network(profile.photo200),
+        if (profile.photo200 != null) Image.network(profile.photo200),
         Text('AccessToken: '),
         Container(
           child: Text(
