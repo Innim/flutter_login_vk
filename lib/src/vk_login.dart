@@ -25,14 +25,16 @@ class VKLogin {
     //if (debug) sdkVersion.then((v) => _log('SDK version: $v'));
   }
 
-  Future<VKResult<VKAccessToken>> get accessToken async {
+  /// Returns access token if user logged in.
+  ///
+  /// If user is now logged in, than returns `null`.
+  Future<VKAccessToken> get accessToken async {
     final Map<dynamic, dynamic> tokenResult =
         await _channel.invokeMethod(_methodGetAccessToken);
 
-    final t = tokenResult['accessToken'];
-    return result(
-        t != null ? VKAccessToken.fromMap(t.cast<String, dynamic>()) : null,
-        tokenResult);
+    return tokenResult != null
+        ? VKAccessToken.fromMap(tokenResult.cast<String, dynamic>())
+        : null;
   }
 
   /// Returns currently used VK SDK.
@@ -43,7 +45,7 @@ class VKLogin {
 
   Future<bool> get isLoggedIn async {
     final token = await accessToken;
-    return _isLoggedIn(token?.data);
+    return _isLoggedIn(token);
   }
 
   /// Get user profile information.
@@ -81,12 +83,12 @@ class VKLogin {
   /// If not logged in, decline [VKScope.email] scope than returns `null`.
   Future<String> getUserEmail() async {
     final token = await accessToken;
-    if (!_isLoggedIn(token?.data)) {
+    if (!_isLoggedIn(token)) {
       if (debug) _log('Not logged in. Email is null');
       return null;
     }
 
-    return token.data.email;
+    return token.email;
   }
 
   /// Start log in VK process.

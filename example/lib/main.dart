@@ -112,10 +112,10 @@ class _MyAppState extends State<MyApp> {
   void _updateLoginInfo() async {
     final plugin = widget.plugin;
     final token = await plugin.accessToken;
-    final profile = await plugin.getUserProfile();
-    final email = await plugin.getUserEmail();
+    final profile = token != null ? await plugin.getUserProfile() : null;
+    final email = token != null ? await plugin.getUserEmail() : null;
     setState(() {
-      _token = token?.data;
+      _token = token;
       _profile = profile?.data;
       _email = email;
     });

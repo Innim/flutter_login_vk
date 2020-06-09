@@ -78,6 +78,8 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
     }
 
     private HashMap<String, Object> getAccessToken() {
+        // TODO @ivan: remove all errors - it's not a error
+        // method should just return null if there is no accessToken
         if (VKSdk.isLoggedIn()) {
             final VKAccessToken token = VKAccessToken.currentToken();
 
