@@ -101,6 +101,7 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
             request.executeWithListener(new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(VKResponse response) {
+                    // TODO @ivan: send only data as result
                     @SuppressWarnings("unchecked")
                     final List<VKApiUserFull> users = (List<VKApiUserFull>) response.parsedModel;
                     result(Results.userProfileResult(users.get(0), null), r);
@@ -108,13 +109,14 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
 
                 @Override
                 public void onError(VKError error) {
+                    // TODO @ivan: send error with r.error()
                     result(Results.userProfileResult(null, Error.vk(error)), r);
                 }
 
                 @Override
                 public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
-                    result(Results.userProfileResult(null, Error.failed(
-                            "Attempt " + attemptNumber + " failed.")), r);
+                    // TODO @ivan: send error with r.error()
+                    result(Results.userProfileResult(null, Error.failed("Attempt " + attemptNumber + " failed.")), r);
                 }
             });
         }

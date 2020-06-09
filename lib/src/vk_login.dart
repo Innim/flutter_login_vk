@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_login_vk/flutter_login_vk.dart';
@@ -50,29 +51,29 @@ class VKLogin {
 
   /// Get user profile information.
   ///
-  /// If not logged in or error during request than return `null`.
-  Future<VKResult<VKUserProfile>> getUserProfile() async {
+  /// If not logged in, than return `null` as a result value.
+  ///
+  /// If error occure during request than method
+  /// will return error result.
+  Future<Result<VKUserProfile>> getUserProfile() async {
     if (await isLoggedIn == false) {
       if (debug) _log('Not logged in. User profile is null');
-      return null;
+      return Result.value(null);
     }
 
     try {
-      final Map<dynamic, dynamic> profileResult =
+      final Map<dynamic, dynamic> result =
           await _channel.invokeMethod(_methodGetUserProfile);
 
-      if (debug) _log('User profile: $profileResult');
+      if (debug) _log('User profile: $result');
 
-      if (profileResult != null) {
-        final p = profileResult['profile'];
-        return result(
-            p != null ? VKUserProfile.fromMap(p.cast<String, dynamic>()) : null,
-            profileResult);
-      }
+      return Result.value(result != null
+          ? VKUserProfile.fromMap(result.cast<String, dynamic>())
+          : null);
     } on PlatformException catch (e) {
       if (debug) _log('Get profile error: $e');
+      return Result.error(e);
     }
-    return null;
   }
 
   /// Get user email.

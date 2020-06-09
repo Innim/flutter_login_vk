@@ -10,6 +10,7 @@ environment:
   flutter: ">=1.12.13"
 
 dependencies:
+  async: ^2.3.0
   flutter:
     sdk: flutter
 
