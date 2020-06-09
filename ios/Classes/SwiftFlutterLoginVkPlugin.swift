@@ -18,14 +18,13 @@ enum LogInArg: String {
 }
 
 public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
-  public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "flutter_login_vk", binaryMessenger: registrar.messenger())
-    let instance = SwiftFlutterLoginVkPlugin()
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        let channel = FlutterMethodChannel(name: "flutter_login_vk", binaryMessenger: registrar.messenger())
+        let instance = SwiftFlutterLoginVkPlugin()
         
-    registrar.addMethodCallDelegate(instance, channel: channel)
+        registrar.addMethodCallDelegate(instance, channel: channel)
         registrar.addApplicationDelegate(instance)
-  }
-
+    }
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let method = PluginMethod(rawValue: call.method) else {
             result(FlutterMethodNotImplemented)
@@ -95,11 +94,12 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
     }
     
     private func getUserProfile(result: @escaping FlutterResult) {
-}
-
+    }
+    
     private func getSdkVersion(result: @escaping FlutterResult) {
         result(VK_SDK_VERSION)
     }
+}
 
 extension VKAccessToken {
     func toMap() -> [String: Any?] {
