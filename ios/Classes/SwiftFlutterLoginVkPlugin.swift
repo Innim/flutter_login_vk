@@ -117,6 +117,42 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
     }
     
     private func getUserProfile(result: @escaping FlutterResult) {
+        let params: [String: Any] = [
+            VK_API_FIELDS: ["first_name", "last_name", "online",
+                            "photo_50", "photo_100", "photo_200"],
+        ]
+        
+        guard let request = VKApi.users()?.get(params) else {
+            result(FlutterError.apiUnavailable("Can't get user data"))
+            return
+        }
+        
+        request.execute(resultBlock: { response in
+            guard
+                let list = response?.parsedModel as? VKUsersArray,
+                let user = list[0]
+                else {
+                    result(FlutterError.invalidResult("Can't parse get users response"))
+                    return
+            }
+            
+            let data: [String: Any?] = [
+                "userId": user.id,
+                "firstName": user.first_name,
+                "lastName": user.last_name,
+                "online": user.online?.toBool(),
+                "onlineMobile": user.online_mobile?.toBool(),
+                "photo50": user.photo_50,
+                "photo100": user.photo_100,
+                "photo200": user.photo_200,
+            ]
+            
+            result(data)
+        }, errorBlock: { error in
+            // TODO: pass error data as details?
+            result(FlutterError.invalidResult(
+                "Get profile error: \(String(describing: error))"))
+        })
     }
     
     private func getSdkVersion(result: @escaping FlutterResult) {
@@ -223,5 +259,15 @@ extension FlutterError {
     
     static func invalidResult(_ message: String, details: Any? = nil) -> FlutterError {
         return FlutterError(code:  "INVALID_RESULT", message: message, details: details);
+    }
+    
+    static func apiUnavailable(_ message: String, details: Any? = nil) -> FlutterError {
+        return FlutterError(code:  "API_UNAVAILABLE", message: message, details: details);
+    }
+}
+
+extension NSNumber {
+    func toBool() -> Bool {
+        return self == 1
     }
 }
