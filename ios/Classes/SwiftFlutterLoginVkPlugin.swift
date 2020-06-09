@@ -25,6 +25,11 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
         registrar.addMethodCallDelegate(instance, channel: channel)
         registrar.addApplicationDelegate(instance)
     }
+    
+    private lazy var _uiDelegate = VkUIDelegate()
+    private lazy var _loginDelegate = VkLogInDelegate()
+    private var _sdk: VKSdk?
+    
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let method = PluginMethod(rawValue: call.method) else {
             result(FlutterMethodNotImplemented)
@@ -77,7 +82,24 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
     // Plugin methods impl
     
     private func initSdk(result: @escaping FlutterResult, appId: String) {
+        if _sdk != nil {
+            if _sdk!.currentAppId == appId {
+                result(true)
+                return
+            }
+        
+            // TODO: logout? dispose? remove delegates? error?
+        }
+        
+        let sdk = VKSdk.initialize(withAppId: appId)!
+        _sdk = sdk
     
+        sdk.uiDelegate = _uiDelegate
+        sdk.register(_loginDelegate)
+        
+        // TODO: wakeUpSession
+        
+        result(true)
     }
     
     private func logIn(result: @escaping FlutterResult, permissions: [String]) {
@@ -99,6 +121,54 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
     private func getSdkVersion(result: @escaping FlutterResult) {
         result(VK_SDK_VERSION)
     }
+}
+
+class VkUIDelegate : NSObject, VKSdkUIDelegate {
+    private var rootViewController: UIViewController? {
+        get {
+            let app = UIApplication.shared
+            return app.delegate?.window??.rootViewController
+        }
+    }
+    
+    func vkSdkShouldPresent(_ controller: UIViewController!) {
+        guard let vc = rootViewController else {
+            // TODO: log error
+            return
+        }
+        
+        vc.present(controller, animated: true)
+    }
+    
+    func vkSdkNeedCaptchaEnter(_ captchaError: VKError!) {
+        guard let vc = rootViewController else {
+            // TODO: log error
+            return
+        }
+        
+        let controller = VKCaptchaViewController.captchaControllerWithError(captchaError)!
+        controller.present(in: vc)
+    }
+}
+
+class VkLogInDelegate : NSObject, VKSdkDelegate {
+    private var _pendingResult: FlutterResult?
+    
+    func startLogin(result: @escaping FlutterResult) {
+        // TODO: check if _pendingResult is not null
+        _pendingResult = result
+    }
+    
+    func vkSdkUserAuthorizationFailed() {
+        // TODO: should notify application
+        print("vkSdkUserAuthorizationFailed")
+    }
+    
+    // VKSdkDelegate
+    
+    func vkSdkAccessAuthorizationFinished(with result: VKAuthorizationResult!) {
+    }
+
 }
 
 extension VKAccessToken {
