@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
                       )
                     : OutlineButton(
                         child: Text('Log In'),
-                        onPressed: _onPressedLogInButton,
+                        onPressed: () => _onPressedLogInButton(context),
                       ),
               ],
             ),
@@ -93,11 +93,21 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  void _onPressedLogInButton() async {
-    await widget.plugin.logIn(scope: [
+  void _onPressedLogInButton(BuildContext context) async {
+    final res = await widget.plugin.logIn(scope: [
       VKScope.email,
     ]);
-    _updateLoginInfo();
+
+    if (res.isError) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Log In failed: ${res.asError.error}'),
+        ),
+      );
+    } else {
+      final loginResult = res.asValue.value;
+      if (!loginResult.isCanceled) _updateLoginInfo();
+    }
   }
 
   void _onPressedLogOutButton() async {
