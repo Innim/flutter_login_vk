@@ -23,7 +23,7 @@ class VKLogin {
   final bool debug;
 
   VKLogin({this.debug = false}) : assert(debug != null) {
-    //if (debug) sdkVersion.then((v) => _log('SDK version: $v'));
+    if (debug) sdkVersion.then((v) => _log('SDK version: $v'));
   }
 
   /// Returns access token if user logged in.
