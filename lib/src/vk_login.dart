@@ -2,9 +2,6 @@ import 'package:async/async.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_login_vk/flutter_login_vk.dart';
-import 'package:flutter_login_vk/src/models/vk_result.dart';
-
-import 'models/vk_scope.dart';
 
 /// Class for implementing login via VK.
 class VKLogin {
@@ -96,7 +93,16 @@ class VKLogin {
   ///
   /// [scope] Array of scope.
   /// If required scope is not in enum [VKScope], than use [customScope].
-  Future<VKResult<VKLoginResult>> logIn(
+  ///
+  /// Value in not error result can't be null.
+  ///
+  /// If user cancel log in process, than value result will be returned,
+  /// but value property [VKLoginResult.isCanceled] will be `true`
+  /// and [VKLoginResult.accessToken] will be `null`.
+  ///
+  /// If error occure during log in process, than error result
+  /// will be returned. And [Result.error] may
+  Future<Result<VKLoginResult>> logIn(
       {List<VKScope> scope = const [], List<String> customScope}) async {
     assert(scope != null);
 
@@ -104,26 +110,27 @@ class VKLogin {
     if (customScope != null) scopeArg.addAll(customScope);
 
     if (debug) _log('Log In with scope $scopeArg');
-    final Map<dynamic, dynamic> loginResultData =
-        await _channel.invokeMethod(_methodLogIn, {_scopeArg: scopeArg});
 
-    if (debug) _log('Result: $loginResultData');
-    final l = loginResultData['login'];
-    return result(
-        l != null ? VKLoginResult.fromMap(l.cast<String, dynamic>()) : null,
-        loginResultData);
+    // TODO @ivan: change in Android implementation
+
+    try {
+      final Map<dynamic, dynamic> res =
+          await _channel.invokeMethod(_methodLogIn, {_scopeArg: scopeArg});
+
+      if (res == null) {
+        return Result.error("Invalid null result");
+      } else {
+        return Result.value(VKLoginResult.fromMap(res.cast<String, dynamic>()));
+      }
+    } on PlatformException catch (e) {
+      if (debug) _log('Log In error: $e');
+      return Result.error(e);
+    }
   }
 
   Future<void> logOut() {
     if (debug) _log('Log Out');
     return _channel.invokeMethod(_methodLogOut);
-  }
-
-  VKResult<T> result<T>(T data, Map<dynamic, dynamic> dataWithError) {
-    final e = dataWithError['error'];
-    return VKResult<T>(
-        data: data,
-        error: e != null ? VKError.fromMap(e.cast<String, dynamic>()) : null);
   }
 
   bool _isLoggedIn(VKAccessToken token) => token != null;
