@@ -84,13 +84,14 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
     // Plugin methods impl
     
     private func initSdk(result: @escaping FlutterResult, appId: String, apiVersion: String?) {
-        if _sdk != nil {
-            if _sdk!.currentAppId == appId {
+        if let prevSdk = _sdk {
+            if prevSdk.currentAppId == appId {
                 result(true)
                 return
             }
             
-            // TODO: logout? dispose? remove delegates? error?
+            prevSdk.unregisterDelegate(_loginDelegate)
+            prevSdk.uiDelegate = nil
         }
         
         let sdk = apiVersion == nil
