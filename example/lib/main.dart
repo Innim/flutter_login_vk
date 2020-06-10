@@ -39,25 +39,27 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 8.0),
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                if (_sdkVersion != null) Text("SDK v$_sdkVersion"),
-                if (isLogin)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: _buildUserInfo(context, _profile, _token, _email),
-                  ),
-                isLogin
-                    ? OutlineButton(
-                        child: Text('Log Out'),
-                        onPressed: _onPressedLogOutButton,
-                      )
-                    : OutlineButton(
-                        child: Text('Log In'),
-                        onPressed: () => _onPressedLogInButton(context),
-                      ),
-              ],
+          child: Builder(
+            builder: (context) => Center(
+              child: Column(
+                children: <Widget>[
+                  if (_sdkVersion != null) Text("SDK v$_sdkVersion"),
+                  if (isLogin)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: _buildUserInfo(context, _profile, _token, _email),
+                    ),
+                  isLogin
+                      ? OutlineButton(
+                          child: Text('Log Out'),
+                          onPressed: _onPressedLogOutButton,
+                        )
+                      : OutlineButton(
+                          child: Text('Log In'),
+                          onPressed: () => _onPressedLogInButton(context),
+                        ),
+                ],
+              ),
             ),
           ),
         ),
