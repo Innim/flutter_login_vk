@@ -35,7 +35,34 @@ See documentation on VK.com for full information:
 
 ### App on VK.com
 
-TODO
+Create an app on VK.com https://vk.com/editapp?act=create
+
+1. Enter "Title".
+2. Select **Standalone app** as "Platform".
+3. Click "Connect app".
+
+An application will be created. Now select tab "Settings" and copy "App ID"
+(referenced as `[APP_ID]` in this readme).
+
+#### App settings for Android
+
+1. Set `Package name for Android` - your package name for Android application (attribute `package` in `AndroidManifest.xml`).
+2. Set `Main activity for Android` - your main activity class (with package). By default it would be `com.yourcompany.yourapp.MainActivity`.
+3. To fill up `Signing certificate fingerprint for Android` you should create SHA1 fingerprint
+as described in the [documentation](https://vk.com/dev/android_sdk?f=1.1.%20Certificate%20Fingerprint) 
+(without `SHA1: ` prefix).
+Add fingerprints for debug and release certificates. *Note:* if your application uses [Google Play App Signing](https://support.google.com/googleplay/android-developer/answer/7384423) than you should get certificate SHA-1 fingerprint from Google Play Console.
+
+    ⚠️ **Important!** You should add fingerprints for every build variants. E.g. if you have CI/CD which build APK for testing
+with it's own cerificate (it may be auto generated debug cetificate or some another) than you should add it's key too.
+
+4. Click "Save".
+
+#### App settings for iOS 
+
+1. Add your Bundle Identifier - set `App Bundle ID for iOS` (you can find it in Xcode: Runner - Target Runner - General, section `Identity`, field `Bundle Identifier`).
+2. Also set `App ID for iOS`, it's you `SKU` (you can find it in [App Store Connect](https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1489717129): My Apps - {Your application} - App Store - App Information, section "General Information"). Mostly often is't the same as bundle ID.
+3. Click "Save".
 
 ### Android
 
@@ -52,3 +79,11 @@ TODO
 ### Usage-in-application
 
 TODO
+
+
+3. Enter "Description".
+4. Select a suitable "Type" and "Category".
+
+Application on
+
+Icons 
