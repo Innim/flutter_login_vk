@@ -70,7 +70,36 @@ TODO
 
 ### iOS
 
-TODO
+Configure `info.plist`:
+
+1. In Xcode right-click on `Info.plist`, and choose `Open As Source Code`.
+2. Copy and paste the following XML snippet into the body of your file (`<dict>...</dict>`),
+replacing `[APP_ID]` with your application id:.
+```xml
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+  <key>CFBundleURLSchemes</key>
+  <array>
+    <string>vk[APP_ID]</string>
+  </array>
+  </dict>
+</array>
+```
+3. Also add to `Info.plist` body (`<dict>...</dict>`):
+```xml
+<key>LSApplicationQueriesSchemes</key> 
+<array> 
+    <string>vk</string> 
+    <string>vk-share</string> 
+    <string>vkauthorize</string> 
+</array>
+```
+
+⚠️ **NOTE.** Check if you already have `CFBundleURLTypes` or `LSApplicationQueriesSchemes` keys in your `Info.plist`. If you have, you should merge their values, instead of adding a duplicate key.
+
+If you want to use `scope=nohttps`, which we strongly **do not recommend**, you should also add `NSAppTransportSecurity`,
+see the [documentation](https://vk.com/dev/ios_sdk?f=1.2.%20Изменения%20для%20iOS%209).
 
 ### Additional VK.com app setup
 
