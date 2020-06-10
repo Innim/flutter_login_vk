@@ -9,7 +9,7 @@ enum PluginMethod: String {
 
 /// Arguments for method `PluginMethod.initSdk`
 enum InitSdkArg: String {
-    case appId, apiVersion
+    case appId, apiVersion, scope
 }
 
 /// Arguments for method `PluginMethod.logIn`
@@ -47,8 +47,10 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
             }
 
             let apiVersionArg = args[InitSdkArg.apiVersion.rawValue] as? String
+            let permissionsArg = args[InitSdkArg.scope.rawValue] as? [String]
             
-            initSdk(result: result, appId: appIdArg, apiVersion: apiVersionArg)
+            initSdk(result: result, appId: appIdArg, apiVersion: apiVersionArg,
+                permissions: permissionsArg)
         case .logIn:
             guard
                 let args = call.arguments as? [String: Any],
@@ -83,7 +85,8 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
     
     // Plugin methods impl
     
-    private func initSdk(result: @escaping FlutterResult, appId: String, apiVersion: String?) {
+    private func initSdk(result: @escaping FlutterResult, appId: String, apiVersion: String?,
+                         permissions: [String]?) {
         if let prevSdk = _sdk {
             if prevSdk.currentAppId == appId {
                 result(true)
@@ -102,7 +105,21 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
         sdk.uiDelegate = _uiDelegate
         sdk.register(_loginDelegate)
         
-        // TODO: wakeUpSession
+        VKSdk.wakeUpSession(permissions) { state, error in
+            switch state {
+            case .initialized, .authorized:
+                result(true)
+            case .pending, .external, .safariInApp, .webview:
+                // Initialization complete, but log in still in progress
+                self._loginDelegate.waitForInit(result: result)
+            case .unknown, .error:
+                result(FlutterError.byError(
+                    message: "Init failed. State: \(state)", error: error))
+            @unknown default:
+                result(FlutterError.byError(
+                    message: "Init failed with unhandled state: \(state)", error: error))
+            }
+        }
         
         result(true)
     }
@@ -196,11 +213,16 @@ class VkUIDelegate : NSObject, VKSdkUIDelegate {
 }
 
 class VkLogInDelegate : NSObject, VKSdkDelegate {
-    private var _pendingResult: FlutterResult?
+    private var _pendingLoginResult: FlutterResult?
+    private var _pendingInitResult: FlutterResult?
     
     func startLogin(result: @escaping FlutterResult) {
         // TODO: check if _pendingResult is not null
-        _pendingResult = result
+        _pendingLoginResult = result
+    }
+    
+    func waitForInit(result: @escaping FlutterResult) {
+        _pendingInitResult = result
     }
     
     func vkSdkUserAuthorizationFailed() {
@@ -211,8 +233,8 @@ class VkLogInDelegate : NSObject, VKSdkDelegate {
     // VKSdkDelegate
     
     func vkSdkAccessAuthorizationFinished(with result: VKAuthorizationResult!) {
-        if let pendingResult = _pendingResult {
-            _pendingResult = nil
+        if let pendingResult = _pendingLoginResult {
+            _pendingLoginResult = nil
             let data: [String: Any];
             if let token = result.token {
                 data = [
@@ -228,7 +250,7 @@ class VkLogInDelegate : NSObject, VKSdkDelegate {
                     } else {
                         pendingResult(FlutterError.apiError(
                             "Login failed: \(vkError.errorMessage ?? "nil")",
-                            details: vkError.toMap()))
+                            error: vkError))
                         return
                     }
                     
@@ -246,10 +268,12 @@ class VkLogInDelegate : NSObject, VKSdkDelegate {
             }
             
             pendingResult(data)
-        } else {
-            // it's auto auth, without authorize() call
-            // TODO: do something?
-            print("pending result is null")
+        } else if let pendingResult = _pendingInitResult {
+            // it's auto auth from wakeUpSession(), without authorize() call
+            
+            // We don't need result here, just a fact that it's done
+            _pendingInitResult = nil
+            pendingResult(true)
         }
     }
 }
@@ -312,8 +336,22 @@ extension FlutterError {
     }
     
     /// Error as result of SDK API call.
-    static func apiError(_ message: String, details: Any? = nil) -> FlutterError {
-        return FlutterError(code:  "API_ERROR", message: message, details: details);
+    static func apiError(_ message: String, error: VKError) -> FlutterError {
+        return FlutterError(code:  "API_ERROR", message: message, details: error.toMap());
+    }
+    
+    static func byError(message: String, error: Error?) -> FlutterError {
+        if error != nil {
+            let nsError = error! as NSError
+            if nsError.domain == VKSdkErrorDomain, let vkError = nsError.vkError {
+                return FlutterError.apiError(message, error: vkError)
+            } else {
+                return FlutterError.invalidResult(
+                    "\(message). Error: \(nsError)")
+            }
+        } else {
+            return FlutterError.invalidResult("\(message). No error provided.")
+        }
     }
 }
 
