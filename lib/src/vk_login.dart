@@ -18,6 +18,8 @@ class VKLogin {
 
   static const _argInitSdkAppId = "appId";
   static const _argInitSdkApiVersion = "apiVersion";
+  // TODO: rename to `permissions`?
+  static const _argInitSdkScope = "scope";
 
   static const MethodChannel _channel = const MethodChannel('flutter_login_vk');
 
@@ -62,18 +64,29 @@ class VKLogin {
   /// Initialize SDK.
   ///
   /// Should call before any other method calls.
-  Future<Result> initSdk(String appId, {String apiVersion}) async {
+  ///
+  /// You can pass [scope] (and/or [customScope], see [logIn])
+  /// to require listed permissions. If user logged in,
+  /// but doesn't have all of this permissions - he will be logged out.
+  Future<Result> initSdk(String appId,
+      {String apiVersion,
+      List<VKScope> scope,
+      List<String> customScope}) async {
     assert(appId != null);
+
+    final scopeArg = _getScope(scope: scope, customScope: customScope);
 
     if (debug) {
       _log('initSdk with $appId' +
-          (apiVersion != null ? ' (api vestion: $apiVersion)' : ''));
+          (apiVersion != null ? ' (api vestion: $apiVersion)' : '') +
+          (scopeArg != null ? '. Permissions: $scopeArg' : ''));
     }
 
     try {
       final bool result = await _channel.invokeMethod(_methodInitSdk, {
         _argInitSdkAppId: appId,
         _argInitSdkApiVersion: apiVersion,
+        _argInitSdkScope: scopeArg,
       });
 
       if (result) {
@@ -153,8 +166,7 @@ class VKLogin {
         'SDK is not initialized. You should call initSdk() first');
     if (!_initialized) throw Exception("SDK is not initialized.");
 
-    final scopeArg = scope.map((e) => e.name).toList();
-    if (customScope != null) scopeArg.addAll(customScope);
+    final scopeArg = _getScope(scope: scope, customScope: customScope);
 
     if (debug) _log('Log In with scope $scopeArg');
 
@@ -185,6 +197,17 @@ class VKLogin {
   }
 
   bool _isLoggedIn(VKAccessToken token) => token != null;
+
+  List<String> _getScope({List<VKScope> scope, List<String> customScope}) {
+    if (scope != null) {
+      final scopeArg = scope.map((e) => e.name).toList();
+      if (customScope != null) scopeArg.addAll(customScope);
+    } else if (customScope != null) {
+      return List.from(customScope);
+    } else {
+      return null;
+    }
+  }
 
   void _log(String message) {
     if (debug) debugPrint('[VK] $message');

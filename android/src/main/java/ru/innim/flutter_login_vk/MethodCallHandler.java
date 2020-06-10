@@ -43,6 +43,8 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
     @Override
     public void onMethodCall(MethodCall call, Result r) {
         // TODO @ivan: initSdk implementation
+        // TODO @ivan: logout in initSdk if not all permissions presented
+        // (permissions can be null)
         if (_activity != null) {
             switch (call.method) {
                 case _LOGIN_METHOD:
