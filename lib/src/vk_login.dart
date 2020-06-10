@@ -202,6 +202,7 @@ class VKLogin {
     if (scope != null) {
       final scopeArg = scope.map((e) => e.name).toList();
       if (customScope != null) scopeArg.addAll(customScope);
+      return scopeArg;
     } else if (customScope != null) {
       return List.from(customScope);
     } else {
