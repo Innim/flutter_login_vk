@@ -217,11 +217,18 @@ class VkLogInDelegate : NSObject, VKSdkDelegate {
     private var _pendingInitResult: FlutterResult?
     
     func startLogin(result: @escaping FlutterResult) {
-        // TODO: check if _pendingResult is not null
+        if let prevResult = _pendingLoginResult {
+            prevResult(FlutterError.interrupted("Interrupted by another login call"))
+        }
+        
         _pendingLoginResult = result
     }
     
     func waitForInit(result: @escaping FlutterResult) {
+        if let prevResult = _pendingInitResult {
+            prevResult(FlutterError.interrupted("Interrupted by another init call"))
+        }
+        
         _pendingInitResult = result
     }
     
@@ -333,6 +340,11 @@ extension FlutterError {
     
     static func apiUnavailable(_ message: String, details: Any? = nil) -> FlutterError {
         return FlutterError(code:  "API_UNAVAILABLE", message: message, details: details);
+    }
+    
+    /// Interrupted. For example by another call.
+    static func interrupted(_ message: String, details: Any? = nil) -> FlutterError {
+        return FlutterError(code: "INTERRUPTED", message: message, details: details);
     }
     
     /// Error as result of SDK API call.
