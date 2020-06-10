@@ -42,6 +42,7 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
 
     @Override
     public void onMethodCall(MethodCall call, Result r) {
+        // TODO @ivan: initSdk implementation
         if (_activity != null) {
             switch (call.method) {
                 case _LOGIN_METHOD:

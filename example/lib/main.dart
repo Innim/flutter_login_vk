@@ -19,13 +19,14 @@ class _MyAppState extends State<MyApp> {
   VKAccessToken _token;
   VKUserProfile _profile;
   String _email;
+  bool _sdkInitialized = false;
 
   @override
   void initState() {
     super.initState();
 
     _getSdkVersion();
-    _updateLoginInfo();
+    _initSdk();
   }
 
   @override
@@ -115,6 +116,12 @@ class _MyAppState extends State<MyApp> {
     _updateLoginInfo();
   }
 
+  void _initSdk() async {
+    await widget.plugin.initSdk('7503887');
+    _sdkInitialized = true;
+    _updateLoginInfo();
+  }
+
   void _getSdkVersion() async {
     final sdkVersion = await widget.plugin.sdkVersion;
     setState(() {
@@ -123,10 +130,13 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _updateLoginInfo() async {
+    if (!_sdkInitialized) return;
+
     final plugin = widget.plugin;
     final token = await plugin.accessToken;
     final profileRes = token != null ? await plugin.getUserProfile() : null;
     final email = token != null ? await plugin.getUserEmail() : null;
+
     setState(() {
       _token = token;
       _profile = profileRes?.asValue?.value;
