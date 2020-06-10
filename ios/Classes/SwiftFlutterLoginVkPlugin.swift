@@ -242,39 +242,36 @@ class VkLogInDelegate : NSObject, VKSdkDelegate {
     func vkSdkAccessAuthorizationFinished(with result: VKAuthorizationResult!) {
         if let pendingResult = _pendingLoginResult {
             _pendingLoginResult = nil
-            let data: [String: Any];
+            let response: Any
             if let token = result.token {
-                data = [
+                response = [
                     "accessToken": token.toMap()
                 ]
             } else if let error = result.error {
                 let nsError = error as NSError
                 if nsError.domain == VKSdkErrorDomain, let vkError = nsError.vkError {
                     if vkError.isCanceled() {
-                        data = [
+                        response = [
                             "isCanceled": true
                         ]
                     } else {
-                        pendingResult(FlutterError.apiError(
+                        response = FlutterError.apiError(
                             "Login failed: \(vkError.errorMessage ?? "nil")",
-                            error: vkError))
-                        return
+                            error: vkError)
                     }
-                    
-                    //                } else if nsError.domain == NSURLErrorDomain && nsError.code == NSURLErrorNotConnectedToInternet {
-                    //                    // TODO: handle NSURLErrorNotConnectedToInternet
+                } else if nsError.isNotConnectedToInternet() {
+                    response = FlutterError.noConnection(
+                        "Login failed: not connected to Internet.")
                 } else {
-                    pendingResult(FlutterError.invalidResult(
-                        "Invalid login error: \(String(describing: error))"))
-                    return
+                    response = FlutterError.invalidResult(
+                        "Invalid login error: \(String(describing: error))")
                 }
             } else {
-                pendingResult(FlutterError.invalidResult(
-                    "Invalid login result: \(String(describing: result))"))
-                return;
+                response = FlutterError.invalidResult(
+                    "Invalid login result: \(String(describing: result))")
             }
             
-            pendingResult(data)
+            pendingResult(response)
         } else if let pendingResult = _pendingInitResult {
             // it's auto auth from wakeUpSession(), without authorize() call
             
@@ -297,6 +294,13 @@ extension VKAccessToken {
             "httpsRequired": httpsRequired,
             "permissions": permissions,
         ]
+    }
+}
+
+extension NSError {
+    func isNotConnectedToInternet() -> Bool {
+        return domain == NSURLErrorDomain &&
+            code == NSURLErrorNotConnectedToInternet
     }
 }
 
@@ -345,6 +349,11 @@ extension FlutterError {
     /// Interrupted. For example by another call.
     static func interrupted(_ message: String, details: Any? = nil) -> FlutterError {
         return FlutterError(code: "INTERRUPTED", message: message, details: details);
+    }
+    
+    /// No connection to Internet.
+    static func noConnection(_ message: String, details: Any? = nil) -> FlutterError {
+        return FlutterError(code: "NO_CONNECTION", message: message, details: details);
     }
     
     /// Error as result of SDK API call.
