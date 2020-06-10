@@ -9,7 +9,7 @@ enum PluginMethod: String {
 
 /// Arguments for method `PluginMethod.initSdk`
 enum InitSdkArg: String {
-    case appId
+    case appId, apiVersion
 }
 
 /// Arguments for method `PluginMethod.logIn`
@@ -45,8 +45,10 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
                     result(FlutterError.invalidArgs("Arguments is invalid"))
                     return
             }
+
+            let apiVersionArg = args[InitSdkArg.apiVersion.rawValue] as? String
             
-            initSdk(result: result, appId: appIdArg)
+            initSdk(result: result, appId: appIdArg, apiVersion: apiVersionArg)
         case .logIn:
             guard
                 let args = call.arguments as? [String: Any],
@@ -81,19 +83,21 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
     
     // Plugin methods impl
     
-    private func initSdk(result: @escaping FlutterResult, appId: String) {
+    private func initSdk(result: @escaping FlutterResult, appId: String, apiVersion: String?) {
         if _sdk != nil {
             if _sdk!.currentAppId == appId {
                 result(true)
                 return
             }
-        
+            
             // TODO: logout? dispose? remove delegates? error?
         }
         
-        let sdk = VKSdk.initialize(withAppId: appId)!
+        let sdk = apiVersion == nil
+            ? VKSdk.initialize(withAppId: appId)!
+            : VKSdk.initialize(withAppId: appId, apiVersion: apiVersion)!
         _sdk = sdk
-    
+        
         sdk.uiDelegate = _uiDelegate
         sdk.register(_loginDelegate)
         
