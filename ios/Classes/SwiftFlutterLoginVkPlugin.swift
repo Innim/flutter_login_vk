@@ -331,15 +331,15 @@ extension VKError {
 
 extension FlutterError {
     static func invalidArgs(_ message: String, details: Any? = nil) -> FlutterError {
-        return FlutterError(code:  "INVALID_ARGS", message: message, details: details);
+        return FlutterError(code: "INVALID_ARGS", message: message, details: details);
     }
     
     static func invalidResult(_ message: String, details: Any? = nil) -> FlutterError {
-        return FlutterError(code:  "INVALID_RESULT", message: message, details: details);
+        return FlutterError(code: "INVALID_RESULT", message: message, details: details);
     }
     
     static func apiUnavailable(_ message: String, details: Any? = nil) -> FlutterError {
-        return FlutterError(code:  "API_UNAVAILABLE", message: message, details: details);
+        return FlutterError(code: "API_UNAVAILABLE", message: message, details: details);
     }
     
     /// Interrupted. For example by another call.
@@ -349,7 +349,7 @@ extension FlutterError {
     
     /// Error as result of SDK API call.
     static func apiError(_ message: String, error: VKError) -> FlutterError {
-        return FlutterError(code:  "API_ERROR", message: message, details: error.toMap());
+        return FlutterError(code: "API_ERROR", message: message, details: error.toMap());
     }
     
     static func byError(message: String, error: Error?) -> FlutterError {
