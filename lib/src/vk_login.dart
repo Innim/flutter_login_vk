@@ -32,6 +32,9 @@ class VKLogin {
     if (debug) sdkVersion.then((v) => _log('SDK version: $v'));
   }
 
+  /// Return `true` if SDK initialized.
+  bool get isInitialized => _initialized;
+
   /// Returns access token if user logged in.
   ///
   /// If user is now logged in, than returns `null`.
