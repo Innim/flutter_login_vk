@@ -121,15 +121,21 @@ see the [documentation](https://vk.com/dev/ios_sdk?f=1.2.%20Изменения%2
 
 ### Additional VK.com app setup
 
-TODO
+Go to [My Apps](https://vk.com/apps?act=manage) and click "Manage" on your app.
 
+On tab "Information" you should:
+1. Enter "Description".
+2. Select a suitable "Category".
+3. Upload small icon "32x32 icon".
+4. Click "Save".
+5. Upload "Square banner" and "A square banner for catalog" - user can see it.
 
-3. Enter "Description".
-4. Select a suitable "Type" and "Category".
+Setup other settings if you need it.
 
-Application on
+Than go to "Setting" tab and turn on application: 
+change "App status" from `Application off` to `Application on and visible to all`.
 
-Icons 
+Click "Save".
 
 ### Usage in application
 
