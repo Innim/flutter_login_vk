@@ -76,11 +76,8 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
     
     public func application(_ application: UIApplication, open url: URL,
                             options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        VKSdk.processOpen(
-            url,
-            fromApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String)
-        
-        return true;
+        let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String
+        return VKSdk.processOpen(url, fromApplication: sourceApplication)
     }
     
     // Plugin methods impl
