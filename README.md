@@ -66,11 +66,22 @@ with it's own cerificate (it may be auto generated debug cetificate or some anot
 
 ### Android
 
-TODO
+Edit `AndroidManifest.xml` (`android/app/src/main/AndroidManifest.xml`):
+
+1. Add the `INTERNET` permission in in the root of `<manifest>`, if not added:
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+``` 
+2. Add an activity to the section `application`:
+```xml
+<activity android:name="com.vk.sdk.VKServiceActivity" android:label="ServiceActivity" android:theme="@style/VK.Transparent" />
+```
+
+See full `AndroidManifest.xml` in [example](example/android/app/src/main/AndroidManifest.xml).
 
 ### iOS
 
-Configure `info.plist`:
+Configure `Info.plist` (`ios/Runner/Info.plist`):
 
 1. In Xcode right-click on `Info.plist`, and choose `Open As Source Code`.
 2. Copy and paste the following XML snippet into the body of your file (`<dict>...</dict>`),
@@ -96,10 +107,13 @@ replacing `[APP_ID]` with your application id:.
 </array>
 ```
 
+See full `Info.plist` in [example](example/ios/Runner/Info.plist).
+
 ⚠️ **NOTE.** Check if you already have `CFBundleURLTypes` or `LSApplicationQueriesSchemes` keys in your `Info.plist`. If you have, you should merge their values, instead of adding a duplicate key.
 
 If you want to use `scope=nohttps`, which we strongly **do not recommend**, you should also add `NSAppTransportSecurity`,
 see the [documentation](https://vk.com/dev/ios_sdk?f=1.2.%20Изменения%20для%20iOS%209).
+
 
 ### Additional VK.com app setup
 
