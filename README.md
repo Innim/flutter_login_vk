@@ -23,7 +23,7 @@ VKSDK version, used in plugin:
 To use this plugin:
 
  1. add `flutter_login_vk` as a [dependency in your pubspec.yaml file](https://pub.dev/packages/flutter_login_vk#-installing-tab-);
- 2. [create an app on VK.com](#app-on-vk.com)
+ 2. [create an app on VK.com](#app-on-vkcom)
  3. [setup android](#android);
  4. [setup ios](#ios);
  5. [additional VK.com app setup](#additional-vk.com-app-setup);
@@ -68,20 +68,24 @@ with it's own cerificate (it may be auto generated debug cetificate or some anot
 
 Edit `AndroidManifest.xml` (`android/app/src/main/AndroidManifest.xml`):
 
-1. Add the `INTERNET` permission in in the root of `<manifest>`, if not added:
+1. Add the `INTERNET` permission in the root of `<manifest>`, if you haven't (probably you have):
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
-``` 
+```
 2. Add an activity to the section `application`:
 ```xml
-<activity android:name="com.vk.sdk.VKServiceActivity" android:label="ServiceActivity" android:theme="@style/VK.Transparent" />
+<activity android:name="com.vk.sdk.VKServiceActivity"
+    android:label="ServiceActivity"
+    android:theme="@style/VK.Transparent" />
 ```
 
 See full `AndroidManifest.xml` in [example](example/android/app/src/main/AndroidManifest.xml).
 
 ### iOS
 
-Configure `Info.plist` (`ios/Runner/Info.plist`):
+Configure `Info.plist` (`ios/Runner/Info.plist`).
+You can edit it as a text file from your IDE,
+or you can open project (`ios/Runner.xcworkspace`) in Xcode.
 
 1. In Xcode right-click on `Info.plist`, and choose `Open As Source Code`.
 2. Copy and paste the following XML snippet into the body of your file (`<dict>...</dict>`),
