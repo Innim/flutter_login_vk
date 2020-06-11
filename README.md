@@ -119,10 +119,6 @@ see the [documentation](https://vk.com/dev/ios_sdk?f=1.2.%20Изменения%2
 
 TODO
 
-### Usage-in-application
-
-TODO
-
 
 3. Enter "Description".
 4. Select a suitable "Type" and "Category".
@@ -130,3 +126,86 @@ TODO
 Application on
 
 Icons 
+
+### Usage in application
+
+First, you should create an instance of `VKLogin`. Than, before any method call or checking `accessToken`,
+you should initialize VK SDK with your application id (`[APP_ID]`):
+
+```dart
+final vk = VKLogin();
+final appId = '7503887'; // Your application ID
+await vk.initSdk(appId);
+```
+
+Now you can use the plugin.
+
+Feautures:
+* log in via VK.com;
+* get access token;
+* get user profile;
+* get user email;
+* check if logged in;
+* log out.
+
+Sample code:
+
+```dart
+import 'package:flutter_login_vk/flutter_login_vk.dart';
+
+// Create an instance of VKLogin
+final vk = VKLogin();
+
+// Initialize
+await vk.initSdk('7503887');
+
+// Log in
+final res = await vk.logIn(permissions: [
+  VKScope.email,
+  VKScope.friends,
+]);
+
+// Check result
+if (res.isValue) {
+    // There is no error, but we don't know yet
+    // if user loggen in or not.
+    // You should check isCanceled
+    final VKLoginResult data = res.asValue.value;
+
+    if (res.isCanceled) {
+        // User cancel log in
+    } else {
+        // Logged in
+
+        // Send access token to server for validation and auth
+        final VKAccessToken accessToken = res.accessToken;
+        print('Access token: ${accessToken.token}');
+    
+        // Get profile data
+        final profile = await fb.getUserProfile();
+        print('Hello, ${profile.firstName}! You ID: ${profile.userId}');
+
+        // Get email (since we request email permissions)
+        final email = await fb.getUserEmail();
+        print('And your email is $email');
+    }
+} else {
+    // Log in failed
+    final errorRes = res.asError;
+    print('Error while log in: ${errorRes.error}');
+}
+```
+
+#### Initialization notes
+
+When you call `initSdk()`, plugin try to restore previous session.
+If token has been expired - it will be refreshed. 
+
+Also, during restoring, log in screen may be shown to user
+(only if user was logged in).
+
+In additional, you can pass to `initSdk()` required `scope`,
+and if current user session doesn't provide it - user will be
+logged out.
+
+Also you can specify API version to user, but you shouldn't.
