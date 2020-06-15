@@ -11,7 +11,7 @@ Easily add VK login feature in your application. User profile information includ
 VKSDK version, used in plugin:
 
 * iOS: **^1.5** ([CocoaPods](https://cocoapods.org/pods/VK-ios-sdk))
-* Android: **^2.2** ([Maven](https://search.maven.org/artifact/com.vk/androidsdk))
+* Android: **1.6.7** ([Maven](https://search.maven.org/artifact/com.vk/androidsdk))
 
 ## Minimum requirements
 
