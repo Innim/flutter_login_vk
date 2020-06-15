@@ -56,6 +56,7 @@ class VKLogin {
   }
 
   // TODO: add get apiVersion
+  // TODO: add method hasScope or permissions in access token
 
   Future<bool> get isLoggedIn async {
     final token = await accessToken;
