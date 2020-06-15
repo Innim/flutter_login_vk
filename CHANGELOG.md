@@ -1,3 +1,3 @@
-## 0.1.0 - 2020-06-XX
+## 0.1.0+1 - 2020-06-15
 
-* TODO: Describe initial release.
+* Initial release: log in, get profile information, get email, log out.
