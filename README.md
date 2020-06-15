@@ -18,6 +18,9 @@ VKSDK version, used in plugin:
 * iOS **9.0** and higher.
 * Android **4.1** and newer (SDK **16**).
 
+⚠️  If your project was create with Flutter pre **1.12** you should upgrade it to the Android embedding v2.
+See https://flutter.dev/go/android-project-migration
+
 ## Getting Started
 
 To use this plugin:
