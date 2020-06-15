@@ -28,9 +28,7 @@ class VKLogin {
 
   bool _initialized = false;
 
-  VKLogin({this.debug = false}) : assert(debug != null) {
-    if (debug) sdkVersion.then((v) => _log('SDK version: $v'));
-  }
+  VKLogin({this.debug = false}) : assert(debug != null);
 
   /// Return `true` if SDK initialized.
   bool get isInitialized => _initialized;
