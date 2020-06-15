@@ -173,8 +173,6 @@ class VKLogin {
 
     if (debug) _log('Log In with scope $scopeArg');
 
-    // TODO @ivan: change in Android implementation
-
     try {
       final Map<dynamic, dynamic> res =
           await _channel.invokeMethod(_methodLogIn, {_argLogInScope: scopeArg});

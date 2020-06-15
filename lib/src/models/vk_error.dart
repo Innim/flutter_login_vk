@@ -12,7 +12,7 @@ class VKError {
   /// It' message for developer.
   final String message;
 
-  // TODO @ivan: add in android
+  // TODO: Current Android version don't support it.
   /// Localized error message. Can be shown to user.
   final String localizedMessage;
 

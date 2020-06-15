@@ -13,19 +13,23 @@ public class LoginCallback implements VKCallback<VKAccessToken> {
 
     public void addPending(MethodChannel.Result result) {
         if (_pendingResult != null)
-            callError(ErrorCode.INTERRUPTED, "Waiting login result was been interrupted!");
+            callError(FlutterError.interrupted("Interrupted by another login call", null));
 
         _pendingResult = result;
     }
 
     @Override
-    public void onResult(final VKAccessToken loginResult) {
-        callResult(Results.loginResult(loginResult, null));
+    public void onResult(final VKAccessToken accessToken) {
+        callResult(Results.loginSuccess(accessToken));
     }
 
     @Override
     public void onError(VKError error) {
-        callResult(Results.loginResult(null, Error.vk(error)));
+        if (error.errorCode == VKError.VK_CANCELED) {
+            callResult(Results.loginCancelled());
+        } else {
+            callError(FlutterError.apiError("Login failed: " + error.errorMessage, error));
+        }
     }
 
     private void callResult(HashMap<String, Object> data) {
@@ -35,9 +39,9 @@ public class LoginCallback implements VKCallback<VKAccessToken> {
         }
     }
 
-    private void callError(String code, String message) {
+    private void callError(FlutterError error) {
         if (_pendingResult != null) {
-            _pendingResult.error(code, message, null);
+            _pendingResult.error(error.code, error.message, error.details);
             _pendingResult = null;
         }
     }

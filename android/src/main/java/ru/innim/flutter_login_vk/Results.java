@@ -13,38 +13,27 @@ public class Results {
         Error
     }
 
-    public static HashMap<String, Object> loginResult(final VKAccessToken result, final Error error) {
+    public static HashMap<String, Object> loginCancelled() {
         return new HashMap<String, Object>() {{
-            put("login", login(result, error));
-            put("error", error(error));
+            put("isCanceled", true);
         }};
     }
 
-    public static HashMap<String, Object> accessTokenResult(final VKAccessToken accessToken, final Error error) {
+    public static HashMap<String, Object> loginSuccess(final VKAccessToken accessToken) {
         return new HashMap<String, Object>() {{
             put("accessToken", accessToken(accessToken));
-            put("error", error(error));
         }};
     }
 
-    public static HashMap<String, Object> userProfileResult(final VKApiUser user, final Error error) {
+    public static HashMap<String, Object> error(final VKError error) {
 
         return new HashMap<String, Object>() {{
-            put("profile", userProfile(user));
-            put("error", error(error));
+            put("apiCode", error.errorCode);
+            put("message", error.errorReason);
         }};
     }
 
-    public static HashMap<String, Object> login(final VKAccessToken result, final Error error) {
-        final LoginStatus status = error == null ? LoginStatus.Success :
-                (error.apiCode == VKError.VK_CANCELED) ? LoginStatus.Cancel : LoginStatus.Error;
-        return new HashMap<String, Object>() {{
-            put("status", status.name());
-            put("accessToken", accessToken(result));
-        }};
-    }
-
-    private static HashMap<String, Object> accessToken(final VKAccessToken accessToken) {
+    public static HashMap<String, Object> accessToken(final VKAccessToken accessToken) {
         if (accessToken == null)
             return null;
 
@@ -59,7 +48,7 @@ public class Results {
         }};
     }
 
-    private static HashMap<String, Object> userProfile(final VKApiUser user) {
+    public static HashMap<String, Object> userProfile(final VKApiUser user) {
         if (user == null)
             return null;
 
@@ -72,17 +61,6 @@ public class Results {
             put("photo50", user.photo_50);
             put("photo100", user.photo_100);
             put("photo200", user.photo_200);
-        }};
-    }
-
-    private static HashMap<String, Object> error(final Error error) {
-        if (error == null)
-            return null;
-
-        return new HashMap<String, Object>() {{
-            put("code", error.code);
-            put("apiCode", error.apiCode);
-            put("message", error.message);
         }};
     }
 }
