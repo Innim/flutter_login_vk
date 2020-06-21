@@ -1,6 +1,7 @@
 ## Next release
 
 * Readme: Upgrade to the Android embedding v2.
+* Readme: Typos and fixes.
 
 ## 0.1.0+1 - 2020-06-15
 

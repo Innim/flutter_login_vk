@@ -8,7 +8,7 @@ Easily add VK login feature in your application. User profile information includ
 
 ## SDK version 
 
-VKSDK version, used in plugin:
+VK SDK version, used in plugin:
 
 * iOS: **^1.5** ([CocoaPods](https://cocoapods.org/pods/VK-ios-sdk))
 * Android: **1.6.7** ([Maven](https://search.maven.org/artifact/com.vk/androidsdk))
@@ -57,7 +57,7 @@ as described in the [documentation](https://vk.com/dev/android_sdk?f=1.1.%20Cert
 Add fingerprints for debug and release certificates. *Note:* if your application uses [Google Play App Signing](https://support.google.com/googleplay/android-developer/answer/7384423) than you should get certificate SHA-1 fingerprint from Google Play Console.
 
     ⚠️ **Important!** You should add fingerprints for every build variants. E.g. if you have CI/CD which build APK for testing
-with it's own cerificate (it may be auto generated debug cetificate or some another) than you should add it's key too.
+with it's own cerificate (it may be auto generated debug cetificate or some another) than you should add it's fingerprint too.
 
 4. Click "Save".
 
@@ -92,7 +92,7 @@ or you can open project (`ios/Runner.xcworkspace`) in Xcode.
 
 1. In Xcode right-click on `Info.plist`, and choose `Open As Source Code`.
 2. Copy and paste the following XML snippet into the body of your file (`<dict>...</dict>`),
-replacing `[APP_ID]` with your application id:.
+replacing `[APP_ID]` with your application id:
 ```xml
 <key>CFBundleURLTypes</key>
 <array>
@@ -153,7 +153,7 @@ await vk.initSdk(appId);
 
 Now you can use the plugin.
 
-Feautures:
+Features:
 * log in via VK.com;
 * get access token;
 * get user profile;
@@ -221,4 +221,4 @@ In additional, you can pass to `initSdk()` required `scope`,
 and if current user session doesn't provide it - user will be
 logged out.
 
-Also you can specify API version to user, but you shouldn't.
+Also you can specify API version to use, but you shouldn't.
