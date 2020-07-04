@@ -36,6 +36,8 @@ See documentation on VK.com for full information:
 * [iOS SDK](https://vk.com/dev/ios_sdk)
 * [Android SDK](https://vk.com/dev/android_sdk)
 
+And here is [instructions in Russian](https://syntaxerror.ru/login-via-vk-in-flutter-app/) if it's your native language ([русская версия](https://syntaxerror.ru/login-via-vk-in-flutter-app/)).
+
 ### App on VK.com
 
 Create an app on VK.com https://vk.com/editapp?act=create
