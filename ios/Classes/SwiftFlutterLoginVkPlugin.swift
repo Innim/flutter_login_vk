@@ -284,7 +284,7 @@ extension VKAccessToken {
             "token": accessToken,
             "userId": userId,
             "expiresIn": expiresIn,
-            "created": Int((created * 1000.0).rounded()),
+            "created": Int64((created * 1000.0).rounded()),
             "secret": secret,
             "email": email,
             "httpsRequired": httpsRequired,

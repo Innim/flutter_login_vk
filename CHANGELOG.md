@@ -1,5 +1,9 @@
 ## Next release
 
+## 0.1.1 - 2020-08-06
+
+* **Fixed**: Crash on iOS 10.
+
 ## 0.1.0+3 - 2020-07-04
 
 * Readme: Upgrade to the Android embedding v2.
