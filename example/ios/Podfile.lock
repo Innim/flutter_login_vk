@@ -2,8 +2,8 @@ PODS:
   - Flutter (1.0.0)
   - flutter_login_vk (0.1.0):
     - Flutter
-    - VK-ios-sdk (~> 1.5)
-  - VK-ios-sdk (1.5.1)
+    - VK-ios-sdk (~> 1.6.1)
+  - VK-ios-sdk (1.6.1)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -21,9 +21,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_login_vk: d21edb4b6ace07e70f894f1ec6c3728b5ba82dcb
-  VK-ios-sdk: 62a10b6571fbcda0657f455fedce7fedf55b4cd0
+  flutter_login_vk: 9dad26a328a4f2e3fa28347d10ab13afe26f0999
+  VK-ios-sdk: 104a8bc259199fb1fc621c1c93d7a9a6befb4ca0
 
-PODFILE CHECKSUM: c34e2287a9ccaa606aeceab922830efb9a6ff69a
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
-COCOAPODS: 1.8.0
+COCOAPODS: 1.9.3
