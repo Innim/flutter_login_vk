@@ -160,8 +160,8 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
                 "userId": user.id,
                 "firstName": user.first_name,
                 "lastName": user.last_name,
-                "online": user.online?.toBool(),
-                "onlineMobile": user.online_mobile?.toBool(),
+                "online": user.online,
+                "onlineMobile": user.online_mobile,
                 "photo50": user.photo_50,
                 "photo100": user.photo_100,
                 "photo200": user.photo_200,
@@ -369,11 +369,5 @@ extension FlutterError {
         } else {
             return FlutterError.invalidResult("\(message). No error provided.")
         }
-    }
-}
-
-extension NSNumber {
-    func toBool() -> Bool {
-        return self == 1
     }
 }
