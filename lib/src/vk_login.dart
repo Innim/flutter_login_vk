@@ -6,22 +6,22 @@ import 'package:flutter_login_vk/flutter_login_vk.dart';
 /// Class for implementing login via VK.
 class VKLogin {
   // Methods
-  static const _methodInitSdk = "initSdk";
-  static const _methodLogIn = "logIn";
-  static const _methodLogOut = "logOut";
-  static const _methodGetAccessToken = "getAccessToken";
-  static const _methodGetUserProfile = "getUserProfile";
-  static const _methodGetSdkVersion = "getSdkVersion";
+  static const _methodInitSdk = 'initSdk';
+  static const _methodLogIn = 'logIn';
+  static const _methodLogOut = 'logOut';
+  static const _methodGetAccessToken = 'getAccessToken';
+  static const _methodGetUserProfile = 'getUserProfile';
+  static const _methodGetSdkVersion = 'getSdkVersion';
 
   // TODO: rename to `permissions`?
-  static const _argLogInScope = "scope";
+  static const _argLogInScope = 'scope';
 
-  static const _argInitSdkAppId = "appId";
-  static const _argInitSdkApiVersion = "apiVersion";
+  static const _argInitSdkAppId = 'appId';
+  static const _argInitSdkApiVersion = 'apiVersion';
   // TODO: rename to `permissions`?
-  static const _argInitSdkScope = "scope";
+  static const _argInitSdkScope = 'scope';
 
-  static const MethodChannel _channel = const MethodChannel('flutter_login_vk');
+  static const MethodChannel _channel = MethodChannel('flutter_login_vk');
 
   /// If `true` all requests and results will be printed in console.
   final bool debug;
@@ -41,8 +41,8 @@ class VKLogin {
         'SDK is not initialized. You should call initSdk() first');
     if (!_initialized) return null;
 
-    final Map<dynamic, dynamic> tokenResult =
-        await _channel.invokeMethod(_methodGetAccessToken);
+    final tokenResult = await _channel
+        .invokeMethod<Map<dynamic, dynamic>>(_methodGetAccessToken);
 
     return tokenResult != null
         ? VKAccessToken.fromMap(tokenResult.cast<String, dynamic>())
@@ -51,7 +51,7 @@ class VKLogin {
 
   /// Returns currently used VK SDK.
   Future<String> get sdkVersion async {
-    final String res = await _channel.invokeMethod(_methodGetSdkVersion);
+    final res = await _channel.invokeMethod<String>(_methodGetSdkVersion);
     return res;
   }
 
@@ -70,7 +70,7 @@ class VKLogin {
   /// You can pass [scope] (and/or [customScope], see [logIn])
   /// to require listed permissions. If user logged in,
   /// but doesn't have all of this permissions - he will be logged out.
-  Future<Result> initSdk(String appId,
+  Future<Result<bool>> initSdk(String appId,
       {String apiVersion,
       List<VKScope> scope,
       List<String> customScope}) async {
@@ -79,13 +79,13 @@ class VKLogin {
     final scopeArg = _getScope(scope: scope, customScope: customScope);
 
     if (debug) {
-      _log('initSdk with $appId' +
-          (apiVersion != null ? ' (api vestion: $apiVersion)' : '') +
-          (scopeArg != null ? '. Permissions: $scopeArg' : ''));
+      final log = StringBuffer('initSdk with $appId');
+      if (apiVersion != null) log.write(' (api vestion: $apiVersion)');
+      if (scopeArg != null) log.write('. Permissions: $scopeArg');
     }
 
     try {
-      final bool result = await _channel.invokeMethod(_methodInitSdk, {
+      final result = await _channel.invokeMethod<bool>(_methodInitSdk, {
         _argInitSdkAppId: appId,
         _argInitSdkApiVersion: apiVersion,
         _argInitSdkScope: scopeArg,
@@ -96,7 +96,7 @@ class VKLogin {
         return Result.value(true);
       } else {
         _initialized = false;
-        return Result.error("Init SDK failed");
+        return Result.error('Init SDK failed');
       }
     } on PlatformException catch (e) {
       if (debug) _log('Init SDK error: $e');
@@ -117,8 +117,8 @@ class VKLogin {
     }
 
     try {
-      final Map<dynamic, dynamic> result =
-          await _channel.invokeMethod(_methodGetUserProfile);
+      final result = await _channel
+          .invokeMethod<Map<dynamic, dynamic>>(_methodGetUserProfile);
 
       if (debug) _log('User profile: $result');
 
@@ -166,18 +166,18 @@ class VKLogin {
 
     assert(_initialized,
         'SDK is not initialized. You should call initSdk() first');
-    if (!_initialized) throw Exception("SDK is not initialized.");
+    if (!_initialized) throw Exception('SDK is not initialized.');
 
     final scopeArg = _getScope(scope: scope, customScope: customScope);
 
     if (debug) _log('Log In with scope $scopeArg');
 
     try {
-      final Map<dynamic, dynamic> res =
-          await _channel.invokeMethod(_methodLogIn, {_argLogInScope: scopeArg});
+      final res = await _channel.invokeMethod<Map<dynamic, dynamic>>(
+          _methodLogIn, {_argLogInScope: scopeArg});
 
       if (res == null) {
-        return Result.error("Invalid null result");
+        return Result.error('Invalid null result');
       } else {
         return Result.value(VKLoginResult.fromMap(res.cast<String, dynamic>()));
       }
@@ -193,7 +193,7 @@ class VKLogin {
     if (!_initialized) return;
 
     if (debug) _log('Log Out');
-    await _channel.invokeMethod(_methodLogOut);
+    await _channel.invokeMethod<void>(_methodLogOut);
   }
 
   bool _isLoggedIn(VKAccessToken token) => token != null;

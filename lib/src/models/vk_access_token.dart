@@ -9,14 +9,14 @@ class VKAccessToken {
   final String email;
 
   VKAccessToken.fromMap(Map<String, dynamic> map)
-      : token = map['token'],
-        userId = map['userId'],
-        expiresIn = map['expiresIn'],
-        created =
-            DateTime.fromMillisecondsSinceEpoch(map['created'], isUtc: true),
-        secret = map['secret'],
-        email = map['email'],
-        httpsRequired = map['httpsRequired'];
+      : token = map['token'] as String,
+        userId = map['userId'] as String,
+        expiresIn = map['expiresIn'] as int,
+        created = DateTime.fromMillisecondsSinceEpoch(map['created'] as int,
+            isUtc: true),
+        secret = map['secret'] as String,
+        email = map['email'] as String,
+        httpsRequired = map['httpsRequired'] as bool;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

@@ -10,14 +10,14 @@ class VKUserProfile {
   final String photo200;
 
   VKUserProfile.fromMap(Map<String, dynamic> map)
-      : userId = map['userId'],
-        firstName = map['firstName'],
-        lastName = map['lastName'],
-        online = map['online'],
-        onlineMobile = map['onlineMobile'],
-        photo50 = map['photo50'],
-        photo100 = map['photo100'],
-        photo200 = map['photo200'];
+      : userId = map['userId'] as int,
+        firstName = map['firstName'] as String,
+        lastName = map['lastName'] as String,
+        online = map['online'] as bool,
+        onlineMobile = map['onlineMobile'] as bool,
+        photo50 = map['photo50'] as String,
+        photo100 = map['photo100'] as String,
+        photo200 = map['photo200'] as String;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

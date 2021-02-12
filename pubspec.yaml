@@ -1,6 +1,6 @@
 name: flutter_login_vk
 description: Login via VK.com. Easily add VK login feature in your application. User profile information included.
-version: 0.2.0
+version: 0.2.1
 homepage: https://github.com/Innim/flutter_login_vk
 repository: https://github.com/Innim/flutter_login_vk
 issue_tracker: https://github.com/Innim/flutter_login_vk/issues
@@ -17,6 +17,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  innim_lint: ^0.1.0
 
 flutter:
   plugin:

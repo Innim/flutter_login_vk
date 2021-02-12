@@ -10,6 +10,8 @@ void main() {
 class MyApp extends StatefulWidget {
   final plugin = VKLogin(debug: true);
 
+  MyApp({Key key}) : super(key: key);
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -43,7 +45,7 @@ class _MyAppState extends State<MyApp> {
             builder: (context) => Center(
               child: Column(
                 children: <Widget>[
-                  if (_sdkVersion != null) Text("SDK v$_sdkVersion"),
+                  if (_sdkVersion != null) Text('SDK v$_sdkVersion'),
                   if (isLogin)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
@@ -51,11 +53,11 @@ class _MyAppState extends State<MyApp> {
                     ),
                   isLogin
                       ? OutlineButton(
-                          child: Text('Log Out'),
+                          child: const Text('Log Out'),
                           onPressed: _onPressedLogOutButton,
                         )
                       : OutlineButton(
-                          child: Text('Log In'),
+                          child: const Text('Log In'),
                           onPressed: () => _onPressedLogInButton(context),
                         ),
                 ],
@@ -72,7 +74,7 @@ class _MyAppState extends State<MyApp> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('User: '),
+        const Text('User: '),
         Text(
           '${profile.firstName} ${profile.lastName}',
           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -82,12 +84,10 @@ class _MyAppState extends State<MyApp> {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         if (profile.photo200 != null) Image.network(profile.photo200),
-        Text('AccessToken: '),
-        Container(
-          child: Text(
-            accessToken.token,
-            softWrap: true,
-          ),
+        const Text('AccessToken: '),
+        Text(
+          accessToken.token,
+          softWrap: true,
         ),
         Text('Created: ${accessToken.created}'),
         Text('Expires in: ${accessToken.expiresIn}'),
@@ -96,7 +96,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  void _onPressedLogInButton(BuildContext context) async {
+  Future<void> _onPressedLogInButton(BuildContext context) async {
     final res = await widget.plugin.logIn(scope: [
       VKScope.email,
     ]);
@@ -109,29 +109,29 @@ class _MyAppState extends State<MyApp> {
       );
     } else {
       final loginResult = res.asValue.value;
-      if (!loginResult.isCanceled) _updateLoginInfo();
+      if (!loginResult.isCanceled) await _updateLoginInfo();
     }
   }
 
-  void _onPressedLogOutButton() async {
+  Future<void> _onPressedLogOutButton() async {
     await widget.plugin.logOut();
-    _updateLoginInfo();
+    await _updateLoginInfo();
   }
 
-  void _initSdk() async {
+  Future<void> _initSdk() async {
     await widget.plugin.initSdk('7503887');
     _sdkInitialized = true;
-    _updateLoginInfo();
+    await _updateLoginInfo();
   }
 
-  void _getSdkVersion() async {
+  Future<void> _getSdkVersion() async {
     final sdkVersion = await widget.plugin.sdkVersion;
     setState(() {
       _sdkVersion = sdkVersion;
     });
   }
 
-  void _updateLoginInfo() async {
+  Future<void> _updateLoginInfo() async {
     if (!_sdkInitialized) return;
 
     final plugin = widget.plugin;

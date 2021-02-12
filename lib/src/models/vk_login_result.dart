@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:flutter_login_vk/flutter_login_vk.dart';
 
 /// Result for login request.
@@ -10,12 +11,15 @@ class VKLoginResult {
   /// `null` if user log in failed.
   final VKAccessToken accessToken;
 
-  VKLoginResult(this.isCanceled, this.accessToken) : assert(isCanceled != null);
+  VKLoginResult(this.accessToken, {@required this.isCanceled})
+      : assert(isCanceled != null);
 
   VKLoginResult.fromMap(Map<String, dynamic> map)
-      : isCanceled = map['isCanceled'] ?? false,
+      : isCanceled = map['isCanceled'] as bool ?? false,
         accessToken = map['accessToken'] != null
-            ? VKAccessToken.fromMap(map['accessToken'].cast<String, dynamic>())
+            ? VKAccessToken.fromMap(
+                (map['accessToken'] as Map<dynamic, dynamic>)
+                    .cast<String, dynamic>())
             : null;
 
   Map<String, dynamic> toMap() {

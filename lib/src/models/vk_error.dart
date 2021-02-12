@@ -19,9 +19,9 @@ class VKError {
   VKError({this.apiCode, this.message, this.localizedMessage});
 
   factory VKError.fromMap(Map<String, dynamic> map) => VKError(
-        apiCode: map['apiCode'],
-        message: map['message'],
-        localizedMessage: map['localizedMessage'],
+        apiCode: map['apiCode'] as int,
+        message: map['message'] as String,
+        localizedMessage: map['localizedMessage'] as String,
       );
 
   Map<String, dynamic> toMap() {
@@ -33,13 +33,13 @@ class VKError {
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is VKError &&
-        o.apiCode == apiCode &&
-        o.message == message &&
-        o.localizedMessage == localizedMessage;
+    return other is VKError &&
+        other.apiCode == apiCode &&
+        other.message == message &&
+        other.localizedMessage == localizedMessage;
   }
 
   @override

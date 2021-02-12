@@ -1,5 +1,9 @@
 ## Next release
 
+## 0.2.1 - 2021-02-12
+
+* Added `innim_lint`. Refactoring.
+
 ## 0.2.0 - 2020-11-17
 
 * Flutter 1.22.
