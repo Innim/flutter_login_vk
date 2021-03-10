@@ -3,10 +3,10 @@ class VKAccessToken {
   final String token;
   final int expiresIn;
   final String userId;
-  final String secret;
+  final String? secret;
   final bool httpsRequired;
   final DateTime created;
-  final String email;
+  final String? email;
 
   VKAccessToken.fromMap(Map<String, dynamic> map)
       : token = map['token'] as String,
@@ -14,9 +14,9 @@ class VKAccessToken {
         expiresIn = map['expiresIn'] as int,
         created = DateTime.fromMillisecondsSinceEpoch(map['created'] as int,
             isUtc: true),
-        secret = map['secret'] as String,
-        email = map['email'] as String,
-        httpsRequired = map['httpsRequired'] as bool;
+        secret = map['secret'] as String?,
+        email = map['email'] as String?,
+        httpsRequired = map['httpsRequired'] as bool? ?? false;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

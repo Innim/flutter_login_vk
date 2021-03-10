@@ -3,25 +3,25 @@ class VKError {
   /// VK API error code, if presented.
   ///
   /// See https://vk.com/dev/errors
-  final int apiCode;
+  final int? apiCode;
 
   // TODO: rename message to description?
 
   /// Error description, if presented.
   ///
   /// It' message for developer.
-  final String message;
+  final String? message;
 
   // TODO: Current Android version don't support it.
   /// Localized error message. Can be shown to user.
-  final String localizedMessage;
+  final String? localizedMessage;
 
   VKError({this.apiCode, this.message, this.localizedMessage});
 
   factory VKError.fromMap(Map<String, dynamic> map) => VKError(
-        apiCode: map['apiCode'] as int,
-        message: map['message'] as String,
-        localizedMessage: map['localizedMessage'] as String,
+        apiCode: map['apiCode'] as int?,
+        message: map['message'] as String?,
+        localizedMessage: map['localizedMessage'] as String?,
       );
 
   Map<String, dynamic> toMap() {
