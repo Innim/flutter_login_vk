@@ -10,17 +10,17 @@ void main() {
 class MyApp extends StatefulWidget {
   final plugin = VKLogin(debug: true);
 
-  MyApp({Key key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  String _sdkVersion;
-  VKAccessToken _token;
-  VKUserProfile _profile;
-  String _email;
+  String? _sdkVersion;
+  VKAccessToken? _token;
+  VKUserProfile? _profile;
+  String? _email;
   bool _sdkInitialized = false;
 
   @override
@@ -33,7 +33,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final isLogin = _token != null && _profile != null;
+    final token = _token;
+    final profile = _profile;
+    final isLogin = token != null;
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -46,17 +48,17 @@ class _MyAppState extends State<MyApp> {
               child: Column(
                 children: <Widget>[
                   if (_sdkVersion != null) Text('SDK v$_sdkVersion'),
-                  if (isLogin)
+                  if (token != null && profile != null)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
-                      child: _buildUserInfo(context, _profile, _token, _email),
+                      child: _buildUserInfo(context, profile, token, _email),
                     ),
                   isLogin
-                      ? OutlineButton(
+                      ? OutlinedButton(
                           child: const Text('Log Out'),
                           onPressed: _onPressedLogOutButton,
                         )
-                      : OutlineButton(
+                      : OutlinedButton(
                           child: const Text('Log In'),
                           onPressed: () => _onPressedLogInButton(context),
                         ),
@@ -70,7 +72,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget _buildUserInfo(BuildContext context, VKUserProfile profile,
-      VKAccessToken accessToken, String email) {
+      VKAccessToken accessToken, String? email) {
+    final photoUrl = profile.photo200;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -83,7 +86,7 @@ class _MyAppState extends State<MyApp> {
           'Online: ${profile.online}, Online mobile: ${profile.onlineMobile}',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        if (profile.photo200 != null) Image.network(profile.photo200),
+        if (photoUrl != null) Image.network(photoUrl),
         const Text('AccessToken: '),
         Text(
           accessToken.token,
@@ -102,13 +105,13 @@ class _MyAppState extends State<MyApp> {
     ]);
 
     if (res.isError) {
-      Scaffold.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Log In failed: ${res.asError.error}'),
+          content: Text('Log In failed: ${res.asError!.error}'),
         ),
       );
     } else {
-      final loginResult = res.asValue.value;
+      final loginResult = res.asValue!.value;
       if (!loginResult.isCanceled) await _updateLoginInfo();
     }
   }
