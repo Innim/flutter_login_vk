@@ -1,5 +1,10 @@
 ## Next release
 
+## 1.0.0 - 2021-03-10
+
+* Migrate to null safety.
+* Flutter 2.
+
 ## 0.2.1 - 2021-02-12
 
 * Added `innim_lint`. Refactoring.
