@@ -1,5 +1,11 @@
 ## Next release
 
+## 1.0.1 - 2021-08-03
+
+* Update VK-ios-sdk to 1.6.2.
+* Update async to 2.8.1.
+* Update innim_lint to 0.2.0.
+
 ## 1.0.0 - 2021-03-10
 
 * Migrate to null safety.
