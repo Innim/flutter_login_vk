@@ -1,6 +1,6 @@
 package ru.innim.flutter_login_vk;
 
-import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.base.dto.BaseError;
 
 public class FlutterError {
     String code;

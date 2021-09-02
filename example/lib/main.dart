@@ -93,7 +93,6 @@ class _MyAppState extends State<MyApp> {
           softWrap: true,
         ),
         Text('Created: ${accessToken.created}'),
-        Text('Expires in: ${accessToken.expiresIn}'),
         if (email != null) Text('Email: $email'),
       ],
     );
@@ -122,7 +121,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _initSdk() async {
-    await widget.plugin.initSdk('7503887');
+    await widget.plugin.initSdk();
     _sdkInitialized = true;
     await _updateLoginInfo();
   }
