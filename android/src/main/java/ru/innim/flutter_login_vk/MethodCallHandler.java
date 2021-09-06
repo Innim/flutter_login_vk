@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.vk.api.sdk.VK;
 import com.vk.api.sdk.VKApiCallback;
+import com.vk.api.sdk.VKTokenExpiredHandler;
 import com.vk.api.sdk.auth.VKAccessToken;
 import com.vk.api.sdk.auth.VKScope;
 import com.vk.sdk.api.account.AccountService;
@@ -32,14 +33,18 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
     private final static String _INIT_SDK_METHOD = "initSdk";
     private final static String _SCOPE_LOGIN_ARG = "scope";
     private final static String _SCOPE_INIT_ARG = "scope";
+    private final static String _GET_TOKEN_EXPIRED = "tokenExpired";
 
     private final LoginCallback _loginCallback;
     private Activity _activity;
     private Context _context;
+    private MethodChannel _channel;
 
-    public MethodCallHandler(Context context, LoginCallback loginCallback) {
+    public MethodCallHandler(Context context, LoginCallback loginCallback, MethodChannel channel) {
         _loginCallback = loginCallback;
         _context = context;
+        _channel = channel;
+        VK.addTokenExpiredHandler(tokenExpiredHandler);
     }
 
     public void updateActivity(Activity activity) {
@@ -82,10 +87,8 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
         VK.initialize(_context);
 
         if (scope != null && VK.isLoggedIn()) {
-
             final int userId = VK.getUserId();
             VK.execute(new AccountService().accountGetAppPermissions(userId), new VKApiCallback<Integer>() {
-
                 @Override
                 public void success(Integer o) {
                     List<String> list = Arrays.asList(scope.toArray(new String[0]));
@@ -99,7 +102,6 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
 
                 @Override
                 public void fail(@NotNull Exception o) {
-
                     error(FlutterError.apiError("Get profile permissions error: " + o.getMessage(),
                             new VKError(0, o.getMessage())), r);
                 }
@@ -150,7 +152,6 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
 
         final VKAccessToken token = VKClient.TOKEN;
         if (token != null) {
-
             VK.execute(new UsersService().usersGet(null, fields, null),
                     new VKApiCallback<List<UsersUserXtrCounters>>() {
                         @Override
@@ -166,6 +167,13 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
                     });
         }
     }
+
+    VKTokenExpiredHandler tokenExpiredHandler = new VKTokenExpiredHandler() {
+        @Override
+        public void onTokenExpired() {
+            _channel.invokeMethod(_GET_TOKEN_EXPIRED, null);
+        }
+    };
 
     private String getSdkVersion() {
         return VKClient.SDK_VERSION;

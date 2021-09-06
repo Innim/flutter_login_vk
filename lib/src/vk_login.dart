@@ -16,8 +16,8 @@ class VKLogin {
   // TODO: rename to `permissions`?
   static const _argLogInScope = 'scope';
 
-  static const _argInitSdkAppId = 'appId';
-  static const _argInitSdkApiVersion = 'apiVersion';
+  static const _setMethodTokenExpired = 'tokenExpired';
+
   // TODO: rename to `permissions`?
   static const _argInitSdkScope = 'scope';
 
@@ -26,9 +26,14 @@ class VKLogin {
   /// If `true` all requests and results will be printed in console.
   final bool debug;
 
+  /// Call if token is expired;
+  final VoidCallback? tokenExpired;
+
   bool _initialized = false;
 
-  VKLogin({this.debug = false});
+  VKLogin({this.debug = false, this.tokenExpired}) {
+    _channel.setMethodCallHandler(methodCallHandle);
+  }
 
   /// Return `true` if SDK initialized.
   bool get isInitialized => _initialized;
@@ -94,6 +99,16 @@ class VKLogin {
     } on PlatformException catch (e) {
       if (debug) _log('Init SDK error: $e');
       return Result.error(e);
+    }
+  }
+
+  /// Call method from native platform.
+  Future<void> methodCallHandle(MethodCall call) async {
+    if (_initialized) {
+      if (debug) _log('Method call handle: ${call.method}');
+      if (call.method == _setMethodTokenExpired) {
+        tokenExpired!();
+      }
     }
   }
 

@@ -2,7 +2,6 @@ package ru.innim.flutter_login_vk;
 
 import com.vk.api.sdk.auth.VKAccessToken;
 import com.vk.sdk.api.base.dto.BaseBoolInt;
-import com.vk.sdk.api.users.dto.UsersUserFull;
 import com.vk.sdk.api.users.dto.UsersUserXtrCounters;
 
 import java.util.HashMap;
@@ -36,12 +35,12 @@ public class Results {
     public static HashMap<String, Object> accessToken(final VKAccessToken accessToken) {
         if (accessToken == null)
             return null;
-
         return new HashMap<String, Object>() {{
             put("token", accessToken.getAccessToken());
             put("userId", accessToken.getUserId());
             put("created", accessToken.getCreated());
             put("email", accessToken.getEmail());
+            put("isValid", accessToken.isValid());
             put("secret", accessToken.getSecret());
         }};
     }

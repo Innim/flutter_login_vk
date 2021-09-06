@@ -3,6 +3,7 @@ class VKAccessToken {
   final String token;
   final int userId;
   final String? secret;
+  final bool isValid;
   final DateTime created;
   final String? email;
 
@@ -12,7 +13,8 @@ class VKAccessToken {
         created = DateTime.fromMillisecondsSinceEpoch(map['created'] as int,
             isUtc: true),
         secret = map['secret'] as String?,
-        email = map['email'] as String?;
+        email = map['email'] as String?,
+        isValid = map['isValid'] as bool? ?? false;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -21,6 +23,7 @@ class VKAccessToken {
       'created': created.millisecondsSinceEpoch,
       'secret': secret,
       'email': email,
+      'isValid': isValid,
     };
   }
 
@@ -32,7 +35,8 @@ class VKAccessToken {
           userId == other.userId &&
           created == other.created &&
           secret == other.secret &&
-          email == other.email;
+          email == other.email &&
+          isValid == other.isValid;
 
   @override
   int get hashCode =>
@@ -40,11 +44,13 @@ class VKAccessToken {
       userId.hashCode ^
       created.hashCode ^
       secret.hashCode ^
+      isValid.hashCode ^
       email.hashCode;
 
   @override
   String toString() {
     return 'VKAccessToken(token: $token, userId: $userId, '
-        'created: $created, secret: $secret, email: $email)';
+        'created: $created, secret: $secret, email: $email, '
+        'isValid: $isValid)';
   }
 }
