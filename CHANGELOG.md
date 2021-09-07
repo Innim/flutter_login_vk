@@ -1,5 +1,11 @@
 ## Next release
 
+## 1.0.2 - 2021-09-07
+
+* [iOS] Change get app id.
+* [Android] Update vk-android-sdk to 3.2.2.
+* Change version async to 2.5.0.
+
 ## 1.0.1 - 2021-08-03
 
 * [iOS] Update VK-ios-sdk to 1.6.2 
