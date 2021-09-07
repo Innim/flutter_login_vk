@@ -38,13 +38,10 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
     private final LoginCallback _loginCallback;
     private Activity _activity;
     private Context _context;
-    private MethodChannel _channel;
 
-    public MethodCallHandler(Context context, LoginCallback loginCallback, MethodChannel channel) {
+    public MethodCallHandler(Context context, LoginCallback loginCallback) {
         _loginCallback = loginCallback;
         _context = context;
-        _channel = channel;
-        VK.addTokenExpiredHandler(tokenExpiredHandler);
     }
 
     public void updateActivity(Activity activity) {
@@ -167,13 +164,6 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
                     });
         }
     }
-
-    VKTokenExpiredHandler tokenExpiredHandler = new VKTokenExpiredHandler() {
-        @Override
-        public void onTokenExpired() {
-            _channel.invokeMethod(_GET_TOKEN_EXPIRED, null);
-        }
-    };
 
     private String getSdkVersion() {
         return VKClient.SDK_VERSION;

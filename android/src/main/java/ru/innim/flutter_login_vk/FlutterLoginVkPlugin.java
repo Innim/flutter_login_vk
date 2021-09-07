@@ -24,7 +24,7 @@ public class FlutterLoginVkPlugin implements FlutterPlugin, ActivityAware {
         _dartChannel = new MethodChannel(messenger, _CHANNEL_NAME);
         _loginCallback = new LoginCallback();
         _methodCallHandler = new MethodCallHandler(flutterPluginBinding.getApplicationContext(),
-                _loginCallback, _dartChannel);
+                _loginCallback);
         _activityListener = new ActivityListener(_loginCallback);
         _dartChannel.setMethodCallHandler(_methodCallHandler);
     }

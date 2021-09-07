@@ -37,7 +37,7 @@ public class Results {
             return null;
         return new HashMap<String, Object>() {{
             put("token", accessToken.getAccessToken());
-            put("userId", accessToken.getUserId());
+            put("userId", String.valueOf(accessToken.getUserId()));
             put("created", accessToken.getCreated());
             put("email", accessToken.getEmail());
             put("isValid", accessToken.isValid());
