@@ -48,7 +48,7 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
             let permissionsArg = args[InitSdkArg.scope.rawValue] as? [String]
             
             guard
-                let appId = getAppIdFromResources()
+                let appId = Bundle.main.object(forInfoDictionaryKey: "VKAppId") as? String
                 else{
                     result(FlutterError.invalidArgs("App id is invalid"))
                     return
@@ -175,13 +175,6 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
             result(FlutterError.invalidResult(
                 "Get profile error: \(String(describing: error))"))
         })
-    }
-    
-    private func getAppIdFromResources() -> String? {
-        let path = Bundle.main.path(forResource: "Info", ofType: "plist")
-        let myDict = NSDictionary(contentsOfFile: path!)        
-        let id = myDict?["VKAppId"] as? String
-        return id;
     }
     
     private func getSdkVersion(result: @escaping FlutterResult) {
