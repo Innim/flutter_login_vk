@@ -19,7 +19,7 @@ public class LoginCallback implements VKAuthCallback {
 
     @Override
     public void onLogin(final VKAccessToken accessToken) {
-        VKClient.TOKEN = accessToken;
+        VKClient.token = accessToken;
         callResult(Results.loginSuccess(accessToken));
     }
 

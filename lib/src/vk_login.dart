@@ -16,8 +16,6 @@ class VKLogin {
   // TODO: rename to `permissions`?
   static const _argLogInScope = 'scope';
 
-  static const _setMethodTokenExpired = 'tokenExpired';
-
   // TODO: rename to `permissions`?
   static const _argInitSdkScope = 'scope';
 

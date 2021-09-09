@@ -33,7 +33,6 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
     private final static String _INIT_SDK_METHOD = "initSdk";
     private final static String _SCOPE_LOGIN_ARG = "scope";
     private final static String _SCOPE_INIT_ARG = "scope";
-    private final static String _GET_TOKEN_EXPIRED = "tokenExpired";
 
     private final LoginCallback _loginCallback;
     private Activity _activity;
@@ -42,6 +41,7 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
     public MethodCallHandler(Context context, LoginCallback loginCallback) {
         _loginCallback = loginCallback;
         _context = context;
+        VK.addTokenExpiredHandler(tokenExpiredHandler);
     }
 
     public void updateActivity(Activity activity) {
@@ -90,7 +90,7 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
                 public void success(Integer o) {
                     List<String> list = Arrays.asList(scope.toArray(new String[0]));
                     List<VKScope> vkScopes = getScopes(list);
-                    if (!VKClient.hasScope(vkScopes, o)) {
+                    if (!VKClient.hasScopes(vkScopes, o)) {
                         VK.logout();
                     }
 
@@ -131,11 +131,12 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
 
     private void logOut() {
         VK.logout();
+        VKClient.token = null;
     }
 
     private HashMap<String, Object> getAccessToken() {
         if (VK.isLoggedIn()) {
-            final VKAccessToken token = VKClient.TOKEN;
+            final VKAccessToken token = VKClient.token;
             if (token != null) {
                 return Results.accessToken(token);
             }
@@ -147,7 +148,7 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
     private void getUserProfile(final Result r) {
         List<UsersFields> fields = VKClient.FIELDS_DEFAULT;
 
-        final VKAccessToken token = VKClient.TOKEN;
+        final VKAccessToken token = VKClient.token;
         if (token != null) {
             VK.execute(new UsersService().usersGet(null, fields, null),
                     new VKApiCallback<List<UsersUserXtrCounters>>() {
@@ -164,6 +165,13 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
                     });
         }
     }
+
+    VKTokenExpiredHandler tokenExpiredHandler = new VKTokenExpiredHandler() {
+        @Override
+        public void onTokenExpired() {
+            VKClient.token = null;
+        }
+    };
 
     private String getSdkVersion() {
         return VKClient.SDK_VERSION;

@@ -16,7 +16,7 @@ VK SDK version, used in plugin:
 ## Minimum requirements
 
 * iOS **9.0** and higher.
-* Android **4.1** and newer (SDK **16**).
+* Android **4.1** and newer (SDK **21**).
 
 ⚠️  If your project was create with Flutter pre **1.12** you should upgrade it to the Android embedding v2.
 See https://flutter.dev/go/android-project-migration
@@ -83,6 +83,13 @@ Edit `AndroidManifest.xml` (`android/app/src/main/AndroidManifest.xml`):
     android:label="ServiceActivity"
     android:theme="@style/VK.Transparent" />
 ```
+3. Add your VK application identifier to the resource file (example strings.xml),
+replacing `[APP_ID]` with your application id:
+```xml
+<resources>
+    <integer name="com_vk_sdk_AppId">[APP_ID]</integer>
+</resources>
+```
 
 See full `AndroidManifest.xml` in [example](example/android/app/src/main/AndroidManifest.xml).
 
@@ -115,6 +122,11 @@ replacing `[APP_ID]` with your application id:
     <string>vkauthorize</string> 
 </array>
 ```
+4. Enter your VK application identifier.
+```xml
+<key>VKAppId</key>
+<string>[APP_ID]</string>
+```
 
 See full `Info.plist` in [example](example/ios/Runner/Info.plist).
 
@@ -144,13 +156,12 @@ Click "Save".
 
 ### Usage in application
 
-First, you should create an instance of `VKLogin`. Than, before any method call or checking `accessToken`,
-you should initialize VK SDK with your application id (`[APP_ID]`):
+First, you should create an instance of `VKLogin`. 
+Than, before any method call or checking `accessToken` you should initialize VK SDK:
 
 ```dart
 final vk = VKLogin();
-final appId = '7503887'; // Your application ID
-await vk.initSdk(appId);
+await vk.initSdk();
 ```
 
 Now you can use the plugin.
@@ -172,7 +183,7 @@ import 'package:flutter_login_vk/flutter_login_vk.dart';
 final vk = VKLogin();
 
 // Initialize
-await vk.initSdk('7503887');
+await vk.initSdk();
 
 // Log in
 final res = await vk.logIn(permissions: [

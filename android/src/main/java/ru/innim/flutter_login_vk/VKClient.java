@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class VKClient {
 
-    static VKAccessToken TOKEN;
+    static VKAccessToken token;
     static final String SDK_VERSION = "3.2.2";
 
     static final List<UsersFields> FIELDS_DEFAULT = Arrays.asList(
@@ -43,15 +43,15 @@ public class VKClient {
                 put(VKScope.MARKET, 134217728);
             }};
 
-    static boolean hasScope(List<VKScope> scopes, int permission) {
+    static boolean hasScopes(List<VKScope> scopes, int permission) {
         if (scopes != null && scopes.size() != 0) {
-            int bytes = 0;
+            int sumBitmasks = 0;
 
             for (VKScope scope : scopes) {
-                bytes += SCOPE_BYTES.get(scope);
+                sumBitmasks |= SCOPE_BYTES.get(scope);
             }
 
-            return permission == bytes;
+            return permission >= sumBitmasks;
         }
 
         return false;
