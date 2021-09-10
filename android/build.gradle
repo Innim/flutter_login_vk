@@ -33,6 +33,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.vk:android-sdk-core:3.2.0'
-    implementation 'com.vk:android-sdk-api:3.2.0'
+    implementation 'com.vk:android-sdk-core:3.2.2'
+    implementation 'com.vk:android-sdk-api:3.2.2'
 }

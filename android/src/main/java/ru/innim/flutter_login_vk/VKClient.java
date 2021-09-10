@@ -13,8 +13,6 @@ import java.util.HashMap;
 
 public class VKClient {
 
-    static final String SDK_VERSION = "3.2.2";
-
     static final List<UsersFields> FIELDS_DEFAULT = Arrays.asList(
             UsersFields.ONLINE,
             UsersFields.PHOTO_50,

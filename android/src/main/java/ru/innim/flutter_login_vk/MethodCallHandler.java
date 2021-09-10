@@ -2,12 +2,12 @@ package ru.innim.flutter_login_vk;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
+import com.vk.api.sdk.BuildConfig;
 import com.vk.api.sdk.VK;
 import com.vk.api.sdk.VKApiCallback;
-import com.vk.api.sdk.VKKeyValueStorage;
-import com.vk.api.sdk.VKPreferencesKeyValueStorage;
-import com.vk.api.sdk.VKTokenExpiredHandler;
 import com.vk.api.sdk.auth.VKAccessToken;
 import com.vk.api.sdk.auth.VKScope;
 import com.vk.sdk.api.account.AccountService;
@@ -167,7 +167,7 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
     }
 
     private String getSdkVersion() {
-        return VKClient.SDK_VERSION;
+        return BuildConfig.VERSION_NAME;
     }
 
     private void result(Object data, Result r) {
