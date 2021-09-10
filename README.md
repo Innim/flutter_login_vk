@@ -16,7 +16,7 @@ VK SDK version, used in plugin:
 ## Minimum requirements
 
 * iOS **9.0** and higher.
-* Android **4.1** and newer (SDK **21**).
+* Android **5.0** and newer (SDK **21**).
 
 ⚠️  If your project was create with Flutter pre **1.12** you should upgrade it to the Android embedding v2.
 See https://flutter.dev/go/android-project-migration
@@ -83,7 +83,7 @@ Edit `AndroidManifest.xml` (`android/app/src/main/AndroidManifest.xml`):
     android:label="ServiceActivity"
     android:theme="@style/VK.Transparent" />
 ```
-3. Add your VK application identifier to the resource file (example strings.xml),
+3. Add your VK application identifier to the resource file (e.g. `strings.xml`),
 replacing `[APP_ID]` with your application id:
 ```xml
 <resources>

@@ -5,6 +5,8 @@ import android.content.Context;
 
 import com.vk.api.sdk.VK;
 import com.vk.api.sdk.VKApiCallback;
+import com.vk.api.sdk.VKKeyValueStorage;
+import com.vk.api.sdk.VKPreferencesKeyValueStorage;
 import com.vk.api.sdk.VKTokenExpiredHandler;
 import com.vk.api.sdk.auth.VKAccessToken;
 import com.vk.api.sdk.auth.VKScope;
@@ -41,7 +43,6 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
     public MethodCallHandler(Context context, LoginCallback loginCallback) {
         _loginCallback = loginCallback;
         _context = context;
-        VK.addTokenExpiredHandler(tokenExpiredHandler);
     }
 
     public void updateActivity(Activity activity) {
@@ -131,12 +132,11 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
 
     private void logOut() {
         VK.logout();
-        VKClient.token = null;
     }
 
     private HashMap<String, Object> getAccessToken() {
         if (VK.isLoggedIn()) {
-            final VKAccessToken token = VKClient.token;
+            final VKAccessToken token = VKClient.getCurrentAccessToken();
             if (token != null) {
                 return Results.accessToken(token);
             }
@@ -148,7 +148,7 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
     private void getUserProfile(final Result r) {
         List<UsersFields> fields = VKClient.FIELDS_DEFAULT;
 
-        final VKAccessToken token = VKClient.token;
+        final VKAccessToken token = VKClient.getCurrentAccessToken();
         if (token != null) {
             VK.execute(new UsersService().usersGet(null, fields, null),
                     new VKApiCallback<List<UsersUserXtrCounters>>() {
@@ -165,13 +165,6 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
                     });
         }
     }
-
-    VKTokenExpiredHandler tokenExpiredHandler = new VKTokenExpiredHandler() {
-        @Override
-        public void onTokenExpired() {
-            VKClient.token = null;
-        }
-    };
 
     private String getSdkVersion() {
         return VKClient.SDK_VERSION;
