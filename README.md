@@ -83,7 +83,7 @@ Edit `AndroidManifest.xml` (`android/app/src/main/AndroidManifest.xml`):
     android:label="ServiceActivity"
     android:theme="@style/VK.Transparent" />
 ```
-3. Add your VK application identifier to the resource file (example strings.xml),
+3. Add your VK application identifier to the resource file (e.g. `strings.xml`),
 replacing `[APP_ID]` with your application id:
 ```xml
 <resources>
