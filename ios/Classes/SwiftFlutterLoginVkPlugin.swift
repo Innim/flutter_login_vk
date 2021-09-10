@@ -50,7 +50,7 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
             guard
                 let appId = Bundle.main.object(forInfoDictionaryKey: "VKAppId") as? String
                 else {
-                    result(FlutterError.invalidArgs("App id is not found. Please enter your VK application identifier in your Info.plist"))
+                    result(FlutterError.invalidArgs("App ID is not found. Please add VKAppId parameter in Info.plist"))
                     return
             }
 
