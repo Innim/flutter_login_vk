@@ -6,9 +6,10 @@ import com.vk.api.sdk.auth.VKAccessToken;
 import com.vk.api.sdk.auth.VKScope;
 import com.vk.sdk.api.users.dto.UsersFields;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class VKClient {
 
@@ -21,43 +22,40 @@ public class VKClient {
             UsersFields.PHOTO_200
     );
 
-    /**
-     * Converts integer value of permissions into arraylist of constants
-     */
-    public static ArrayList<VKScope> parseVkPermissionsFromInteger(int permissionsValue) {
-        ArrayList<VKScope> res = new ArrayList<>();
-        if ((permissionsValue & 1) > 0) res.add(VKScope.NOTIFY);
-        if ((permissionsValue & 2) > 0) res.add(VKScope.FRIENDS);
-        if ((permissionsValue & 4) > 0) res.add(VKScope.PHOTOS);
-        if ((permissionsValue & 8) > 0) res.add(VKScope.AUDIO);
-        if ((permissionsValue & 16) > 0) res.add(VKScope.VIDEO);
-        if ((permissionsValue & 64) > 0) res.add(VKScope.STORIES);
-        if ((permissionsValue & 128) > 0) res.add(VKScope.PAGES);
-        if ((permissionsValue & 1024) > 0) res.add(VKScope.STATUS);
-        if ((permissionsValue & 2048) > 0) res.add(VKScope.NOTES);
-        if ((permissionsValue & 4096) > 0) res.add(VKScope.MESSAGES);
-        if ((permissionsValue & 8192) > 0) res.add(VKScope.WALL);
-        if ((permissionsValue & 32768) > 0) res.add(VKScope.ADS);
-        if ((permissionsValue & 65536) > 0) res.add(VKScope.OFFLINE);
-        if ((permissionsValue & 131072) > 0) res.add(VKScope.DOCS);
-        if ((permissionsValue & 262144) > 0) res.add(VKScope.GROUPS);
-        if ((permissionsValue & 524288) > 0) res.add(VKScope.NOTIFICATIONS);
-        if ((permissionsValue & 1048576) > 0) res.add(VKScope.STATS);
-        if ((permissionsValue & 4194304) > 0) res.add(VKScope.EMAIL);
-        if ((permissionsValue & 134217728) > 0) res.add(VKScope.MARKET);
-        return res;
-    }
+    static final Map<VKScope, Integer> SCOPE_BYTES =
+            new HashMap<VKScope, Integer>() {{
+                put(VKScope.NOTIFY, 1);
+                put(VKScope.FRIENDS, 2);
+                put(VKScope.PHOTOS, 4);
+                put(VKScope.AUDIO, 8);
+                put(VKScope.VIDEO, 16);
+                put(VKScope.STORIES, 64);
+                put(VKScope.PAGES, 128);
+                put(VKScope.STATUS, 1024);
+                put(VKScope.NOTES, 2048);
+                put(VKScope.MESSAGES, 4096);
+                put(VKScope.WALL, 8192);
+                put(VKScope.ADS, 32768);
+                put(VKScope.OFFLINE, 65536);
+                put(VKScope.DOCS, 131072);
+                put(VKScope.GROUPS, 262144);
+                put(VKScope.NOTIFICATIONS, 524288);
+                put(VKScope.STATS, 1048576);
+                put(VKScope.EMAIL, 4194304);
+                put(VKScope.MARKET, 134217728);
+            }};
 
     static boolean hasScopes(List<VKScope> scopes, int permission) {
-        boolean allScope = true;
-        final ArrayList<VKScope> permissionScopes = parseVkPermissionsFromInteger(permission);
-        for (VKScope scope : scopes) {
-            if (!permissionScopes.contains(scope)) {
-                allScope = false;
-                break;
+        if (scopes != null && scopes.size() != 0) {
+            int scopesMask = 0;
+            for (VKScope scope : scopes) {
+                final int value = SCOPE_BYTES.get(scope);
+                scopesMask |= value;
             }
+
+            return (scopesMask & permission) == scopesMask;
         }
-        return allScope;
+        return true;
     }
 
     static VKAccessToken getCurrentAccessToken() {

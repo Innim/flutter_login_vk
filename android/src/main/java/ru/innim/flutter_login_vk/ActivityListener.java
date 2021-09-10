@@ -16,6 +16,6 @@ public class ActivityListener implements PluginRegistry.ActivityResultListener {
 
     @Override
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        return data == null || !VK.onActivityResult(requestCode, resultCode, data, _loginCallback);
+        return VK.onActivityResult(requestCode, resultCode, data, _loginCallback);
     }
 }

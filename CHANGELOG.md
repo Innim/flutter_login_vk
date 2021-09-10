@@ -4,7 +4,6 @@
 
 * **BREAKING** Method `initSdk()` does not accept `appId` and `apiVersion`, you need to define it in `strings.xml`/`Info.plist`, see [README](./README.md).
 * **BREAKING** Removed fields `httpsRequired ` and `expiresIn` from `VKAccessToken`.
-* Format of the `appID` task has changed, see suggestion for the first item.
 * [Android] Update vk-android-sdk to 3.2.2.
 * [Android] Up your `minSdkVersion` to 21.
 * Change version async to 2.5.0.
