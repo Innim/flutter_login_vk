@@ -2,7 +2,7 @@
 
 ## 2.0.0 - 2021-09-09
 
-* **BREAKING** Method `initSdk()` does not accept `appId and apiVersion`.
+* **BREAKING** Method `initSdk()` does not accept `appId` and `apiVersion`, you need to define it in `strings.xml`/`Info.plist`, see [README](./README.md).
 * **BREAKING** From `VKAccessToken` removed params `httpsRequired and expiresIn`.
 * [iOS] **BREAKING** Enter your VK application identifier in your Info.plist.
 * [Android] Update vk-android-sdk to 3.2.2.
