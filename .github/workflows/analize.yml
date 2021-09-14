@@ -1,4 +1,4 @@
-name: Tests
+name: Analyze
 
 on:
   push:
@@ -25,5 +25,5 @@ jobs:
       - name: Analyze project source
         run: flutter analyze
 
-      - name: Run tests
-        run: flutter test
+      #- name: Run tests
+      #  run: flutter test
