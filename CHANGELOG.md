@@ -1,5 +1,13 @@
 ## Next release
 
+## 2.0.0 - 2021-09-09
+
+* **BREAKING** Method `initSdk()` does not accept `appId` and `apiVersion`, you need to define it in `strings.xml`/`Info.plist`, see [README](./README.md).
+* **BREAKING** Removed fields `httpsRequired ` and `expiresIn` from `VKAccessToken`.
+* [Android] Update vk-android-sdk to 3.2.2.
+* [Android] Up your `minSdkVersion` to 21.
+* Change version async to 2.5.0.
+
 ## 1.0.1 - 2021-08-03
 
 * [iOS] Update VK-ios-sdk to 1.6.2 

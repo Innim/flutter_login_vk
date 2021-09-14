@@ -2,7 +2,7 @@ package ru.innim.flutter_login_vk;
 
 import android.content.Intent;
 
-import com.vk.sdk.VKSdk;
+import com.vk.api.sdk.VK;
 
 import io.flutter.plugin.common.PluginRegistry;
 
@@ -16,6 +16,6 @@ public class ActivityListener implements PluginRegistry.ActivityResultListener {
 
     @Override
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        return VKSdk.onActivityResult(requestCode, resultCode, data, _loginCallback);
+        return VK.onActivityResult(requestCode, resultCode, data, _loginCallback);
     }
 }

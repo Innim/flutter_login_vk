@@ -16,8 +16,6 @@ class VKLogin {
   // TODO: rename to `permissions`?
   static const _argLogInScope = 'scope';
 
-  static const _argInitSdkAppId = 'appId';
-  static const _argInitSdkApiVersion = 'apiVersion';
   // TODO: rename to `permissions`?
   static const _argInitSdkScope = 'scope';
 
@@ -70,22 +68,17 @@ class VKLogin {
   /// You can pass [scope] (and/or [customScope], see [logIn])
   /// to require listed permissions. If user logged in,
   /// but doesn't have all of this permissions - he will be logged out.
-  Future<Result<bool>> initSdk(String appId,
-      {String? apiVersion,
-      List<VKScope>? scope,
-      List<String>? customScope}) async {
+  Future<Result<bool>> initSdk(
+      {List<VKScope>? scope, List<String>? customScope}) async {
     final scopeArg = _getScope(scope: scope, customScope: customScope);
 
     if (debug) {
-      final log = StringBuffer('initSdk with $appId');
-      if (apiVersion != null) log.write(' (api vestion: $apiVersion)');
+      final log = StringBuffer('initSdk');
       if (scopeArg != null) log.write('. Permissions: $scopeArg');
     }
 
     try {
       final result = await _channel.invokeMethod<bool>(_methodInitSdk, {
-        _argInitSdkAppId: appId,
-        _argInitSdkApiVersion: apiVersion,
         _argInitSdkScope: scopeArg,
       });
 

@@ -9,7 +9,7 @@ enum PluginMethod: String {
 
 /// Arguments for method `PluginMethod.initSdk`
 enum InitSdkArg: String {
-    case appId, apiVersion, scope
+    case scope
 }
 
 /// Arguments for method `PluginMethod.logIn`
@@ -39,18 +39,22 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
         switch method {
         case .initSdk:
             guard
-                let args = call.arguments as? [String: Any],
-                let appIdArg = args[InitSdkArg.appId.rawValue] as? String
+                let args = call.arguments as? [String: Any]
                 else {
                     result(FlutterError.invalidArgs("Arguments is invalid"))
                     return
             }
 
-            let apiVersionArg = args[InitSdkArg.apiVersion.rawValue] as? String
             let permissionsArg = args[InitSdkArg.scope.rawValue] as? [String]
             
-            initSdk(result: result, appId: appIdArg, apiVersion: apiVersionArg,
-                permissions: permissionsArg)
+            guard
+                let appId = Bundle.main.object(forInfoDictionaryKey: "VKAppId") as? String
+                else {
+                    result(FlutterError.invalidArgs("App ID is not found. Please add VKAppId parameter in Info.plist"))
+                    return
+            }
+
+            initSdk(result: result, appId: appId, permissions: permissionsArg)
         case .logIn:
             guard
                 let args = call.arguments as? [String: Any],
@@ -82,8 +86,7 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
     
     // Plugin methods impl
     
-    private func initSdk(result: @escaping FlutterResult, appId: String, apiVersion: String?,
-                         permissions: [String]?) {
+    private func initSdk(result: @escaping FlutterResult, appId: String, permissions: [String]?) {
         if let prevSdk = _sdk {
             if prevSdk.currentAppId == appId {
                 result(true)
@@ -94,9 +97,8 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
             prevSdk.uiDelegate = nil
         }
         
-        let sdk = apiVersion == nil
-            ? VKSdk.initialize(withAppId: appId)!
-            : VKSdk.initialize(withAppId: appId, apiVersion: apiVersion)!
+        let sdk = VKSdk.initialize(withAppId: appId)!
+            
         _sdk = sdk
         
         sdk.uiDelegate = _uiDelegate

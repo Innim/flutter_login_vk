@@ -1,14 +1,13 @@
 package ru.innim.flutter_login_vk;
 
-import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKCallback;
-import com.vk.sdk.api.VKError;
+import com.vk.api.sdk.auth.VKAccessToken;
+import com.vk.api.sdk.auth.VKAuthCallback;
 
 import java.util.HashMap;
 
 import io.flutter.plugin.common.MethodChannel;
 
-public class LoginCallback implements VKCallback<VKAccessToken> {
+public class LoginCallback implements VKAuthCallback {
     private MethodChannel.Result _pendingResult;
 
     public void addPending(MethodChannel.Result result) {
@@ -19,16 +18,17 @@ public class LoginCallback implements VKCallback<VKAccessToken> {
     }
 
     @Override
-    public void onResult(final VKAccessToken accessToken) {
+    public void onLogin(final VKAccessToken accessToken) {
         callResult(Results.loginSuccess(accessToken));
     }
 
     @Override
-    public void onError(VKError error) {
-        if (error.errorCode == VKError.VK_CANCELED) {
+    public void onLoginFailed(int errorCode) {
+        if (errorCode == VKAuthCallback.AUTH_CANCELED) {
             callResult(Results.loginCancelled());
         } else {
-            callError(FlutterError.apiError("Login failed: " + error.errorMessage, error));
+            callError(FlutterError.apiError("Login failed: " + errorCode,
+                    new VKError(errorCode, null)));
         }
     }
 
