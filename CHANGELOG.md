@@ -4,7 +4,7 @@
 
 * Change readme.
 
-## 2.0.0 - 2021-09-09
+## 2.0.0 - 2021-09-14
 
 * **BREAKING** Method `initSdk()` does not accept `appId` and `apiVersion`, you need to define it in `strings.xml`/`Info.plist`, see [README](./README.md).
 * **BREAKING** Removed fields `httpsRequired ` and `expiresIn` from `VKAccessToken`.
