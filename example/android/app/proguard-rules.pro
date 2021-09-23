@@ -1,3 +1,3 @@
-##---------------Begin: proguard configuration for Gson  ----------
+##---------------Begin: proguard configuration for VK  ----------
 -keep class com.vk.** { *; }
-##---------------End: proguard configuration for Gson  ----------
+##---------------End: proguard configuration for VK  ----------
