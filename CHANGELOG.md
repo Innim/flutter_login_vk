@@ -1,5 +1,10 @@
 ## Next release
 
+## 2.0.0+2 - 2021-09-23
+
+* Remove check token in `getUserProfile` method.
+* **BREAKING** Add rules `-keep class com.vk.** { *; }` in you proguard file (`android/app/proguard-rules.pro`).
+
 ## 2.0.0+1 - 2021-09-14
 
 * Update SDK version in readme.

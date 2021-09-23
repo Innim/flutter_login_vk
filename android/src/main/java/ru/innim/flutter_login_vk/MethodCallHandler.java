@@ -148,22 +148,19 @@ public class MethodCallHandler implements MethodChannel.MethodCallHandler {
     private void getUserProfile(final Result r) {
         List<UsersFields> fields = VKClient.FIELDS_DEFAULT;
 
-        final VKAccessToken token = VKClient.getCurrentAccessToken();
-        if (token != null) {
-            VK.execute(new UsersService().usersGet(null, fields, null),
-                    new VKApiCallback<List<UsersUserXtrCounters>>() {
-                        @Override
-                        public void success(List<UsersUserXtrCounters> o) {
-                            result(Results.userProfile(o.get(0)), r);
-                        }
+        VK.execute(new UsersService().usersGet(null, fields, null),
+                new VKApiCallback<List<UsersUserXtrCounters>>() {
+                    @Override
+                    public void success(List<UsersUserXtrCounters> o) {
+                        result(Results.userProfile(o.get(0)), r);
+                    }
 
-                        @Override
-                        public void fail(@NotNull Exception o) {
-                            error(FlutterError.apiError("Get profile error: " + o.getMessage(),
-                                    new VKError(0, o.getMessage())), r);
-                        }
-                    });
-        }
+                    @Override
+                    public void fail(@NotNull Exception o) {
+                        error(FlutterError.apiError("Get profile error: " + o.getMessage(),
+                                new VKError(0, o.getMessage())), r);
+                    }
+                });
     }
 
     private String getSdkVersion() {
