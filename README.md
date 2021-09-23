@@ -90,6 +90,8 @@ replacing `[APP_ID]` with your application id:
     <integer name="com_vk_sdk_AppId">[APP_ID]</integer>
 </resources>
 ```
+4. Add rules `-keep class com.vk.** { *; }` in you proguard file (`android/app/proguard-rules.pro`).
+
 
 See full `AndroidManifest.xml` in [example](example/android/app/src/main/AndroidManifest.xml).
 
