@@ -35,8 +35,8 @@ class VKClient {
                 VKScope.MARKET to 134217728
         )
 
-        fun hasScopes(scopes: List<VKScope?>?, permission: Int): Boolean {
-            if (scopes != null && scopes.isNotEmpty()) {
+        fun hasScopes(scopes: List<VKScope>, permission: Int): Boolean {
+            if (scopes.isNotEmpty()) {
                 var scopesMask = 0
                 for (scope in scopes) {
                     val value: Int? = scopeBytes.get(key = scope)
