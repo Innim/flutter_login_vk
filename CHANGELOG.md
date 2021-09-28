@@ -1,5 +1,9 @@
 ## Next release
 
+## 2.1.0 - 2021-09-28
+
+* [Android] Android implementation rewritten in Kotlin. Thanks to [@baihu92](https://github.com/baihu92).
+
 ## 2.0.0+2 - 2021-09-23
 
 * **Important!** Add rules `-keep class com.vk.** { *; }` in you proguard file (`android/app/proguard-rules.pro`).
