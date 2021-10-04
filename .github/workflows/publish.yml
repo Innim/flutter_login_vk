@@ -4,6 +4,7 @@ on:
   workflow_run:
     workflows: ["Analyze"]
     types: [completed]
+    branches: [master]
 
   workflow_dispatch:
 
