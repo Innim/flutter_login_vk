@@ -10,17 +10,17 @@ void main() {
 class MyApp extends StatefulWidget {
   final plugin = VKLogin(debug: true);
 
-  MyApp({Key? key}) : super(key: key);
+  MyApp({Key key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  String? _sdkVersion;
-  VKAccessToken? _token;
-  VKUserProfile? _profile;
-  String? _email;
+  String _sdkVersion;
+  VKAccessToken _token;
+  VKUserProfile _profile;
+  String _email;
   bool _sdkInitialized = false;
 
   @override
@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget _buildUserInfo(BuildContext context, VKUserProfile profile,
-      VKAccessToken accessToken, String? email) {
+      VKAccessToken accessToken, String email) {
     final photoUrl = profile.photo200;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,13 +104,9 @@ class _MyAppState extends State<MyApp> {
     ]);
 
     if (res.isError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Log In failed: ${res.asError!.error}'),
-        ),
-      );
+
     } else {
-      final loginResult = res.asValue!.value;
+      final loginResult = res.asValue.value;
       if (!loginResult.isCanceled) await _updateLoginInfo();
     }
   }

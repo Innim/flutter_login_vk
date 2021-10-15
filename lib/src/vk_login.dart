@@ -34,7 +34,7 @@ class VKLogin {
   /// Returns access token if user logged in.
   ///
   /// If user is now logged in, than returns `null`.
-  Future<VKAccessToken?> get accessToken async {
+  Future<VKAccessToken> get accessToken async {
     assert(_initialized,
         'SDK is not initialized. You should call initSdk() first');
     if (!_initialized) return null;
@@ -48,7 +48,7 @@ class VKLogin {
   }
 
   /// Returns currently used VK SDK.
-  Future<String?> get sdkVersion async {
+  Future<String> get sdkVersion async {
     final res = await _channel.invokeMethod<String>(_methodGetSdkVersion);
     return res;
   }
@@ -69,7 +69,7 @@ class VKLogin {
   /// to require listed permissions. If user logged in,
   /// but doesn't have all of this permissions - he will be logged out.
   Future<Result<bool>> initSdk(
-      {List<VKScope>? scope, List<String>? customScope}) async {
+      {List<VKScope> scope, List<String> customScope}) async {
     final scopeArg = _getScope(scope: scope, customScope: customScope);
 
     if (debug) {
@@ -101,7 +101,7 @@ class VKLogin {
   ///
   /// If error occure during request than method
   /// will return error result.
-  Future<Result<VKUserProfile?>> getUserProfile() async {
+  Future<Result<VKUserProfile>> getUserProfile() async {
     if (await isLoggedIn == false) {
       if (debug) _log('Not logged in. User profile is null');
       return Result.value(null);
@@ -128,14 +128,14 @@ class VKLogin {
   /// accepted [VKScope.email] scope.
   ///
   /// If not logged in, decline [VKScope.email] scope than returns `null`.
-  Future<String?> getUserEmail() async {
+  Future<String> getUserEmail() async {
     final token = await accessToken;
     if (!_isLoggedIn(token)) {
       if (debug) _log('Not logged in. Email is null');
       return null;
     }
 
-    return token!.email;
+    return token.email;
   }
 
   /// Start log in VK process.
@@ -152,7 +152,7 @@ class VKLogin {
   /// If error occure during log in process, than error result
   /// will be returned. And [Result.error] may
   Future<Result<VKLoginResult>> logIn(
-      {List<VKScope> scope = const [], List<String>? customScope}) async {
+      {List<VKScope> scope = const [], List<String> customScope}) async {
     assert(_initialized,
         'SDK is not initialized. You should call initSdk() first');
     if (!_initialized) throw Exception('SDK is not initialized.');
@@ -185,9 +185,9 @@ class VKLogin {
     await _channel.invokeMethod<void>(_methodLogOut);
   }
 
-  bool _isLoggedIn(VKAccessToken? token) => token != null;
+  bool _isLoggedIn(VKAccessToken token) => token != null;
 
-  List<String>? _getScope({List<VKScope>? scope, List<String>? customScope}) {
+  List<String> _getScope({List<VKScope> scope, List<String> customScope}) {
     if (scope != null) {
       final scopeArg = scope.map((e) => e.name).toList();
       if (customScope != null) scopeArg.addAll(customScope);

@@ -3,21 +3,21 @@ class VKUserProfile {
   final int userId;
   final String firstName;
   final String lastName;
-  final bool? online;
-  final bool? onlineMobile;
-  final String? photo50;
-  final String? photo100;
-  final String? photo200;
+  final bool online;
+  final bool onlineMobile;
+  final String photo50;
+  final String photo100;
+  final String photo200;
 
   VKUserProfile.fromMap(Map<String, dynamic> map)
       : userId = map['userId'] as int,
         firstName = map['firstName'] as String,
         lastName = map['lastName'] as String,
-        online = map['online'] as bool?,
-        onlineMobile = map['onlineMobile'] as bool?,
-        photo50 = map['photo50'] as String?,
-        photo100 = map['photo100'] as String?,
-        photo200 = map['photo200'] as String?;
+        online = map['online'] as bool,
+        onlineMobile = map['onlineMobile'] as bool,
+        photo50 = map['photo50'] as String,
+        photo100 = map['photo100'] as String,
+        photo200 = map['photo200'] as String;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
