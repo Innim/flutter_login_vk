@@ -12,9 +12,10 @@ import com.vk.api.sdk.VK.login
 import com.vk.api.sdk.VK.logout
 import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKScope
+import com.vk.dto.common.id.UserId
 import com.vk.sdk.api.account.AccountService
 import com.vk.sdk.api.users.UsersService
-import com.vk.sdk.api.users.dto.UsersUserXtrCounters
+import com.vk.sdk.api.users.dto.UsersUserFull
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import java.util.*
@@ -66,7 +67,7 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
 
         if (scope != null && isLoggedIn()) {
             val userId = getUserId()
-            execute(AccountService().accountGetAppPermissions(userId), object : VKApiCallback<Int> {
+            execute(AccountService().accountGetAppPermissions(UserId(userId.toLong())), object : VKApiCallback<Int> {
                 override fun success(result: Int) {
                     val list = listOf(*scope.toTypedArray())
                     val vkScopes: List<VKScope> = getScopes(list)
@@ -98,7 +99,7 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
         val count = list.size
         for (i in 0 until count) {
             val item = list[i]
-            val scope = VKScope.valueOf(item.toUpperCase(Locale.getDefault()))
+            val scope = VKScope.valueOf(item.uppercase(Locale.getDefault()))
             vkScopes.add(scope)
         }
         return vkScopes
@@ -125,8 +126,8 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
         val fields = VKClient.fieldsDefault
 
         execute(UsersService().usersGet(fields = fields),
-                object : VKApiCallback<List<UsersUserXtrCounters?>?> {
-                    override fun success(result: List<UsersUserXtrCounters?>?) {
+                object : VKApiCallback<List<UsersUserFull?>?> {
+                    override fun success(result: List<UsersUserFull?>?) {
                         if (result != null && result.isNotEmpty() && result[0] != null) {
                             sendResult(Results.userProfile(result[0]!!), r)
                         } else {
@@ -142,7 +143,8 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
     }
 
     private fun getSdkVersion(): String {
-        return BuildConfig.VERSION_NAME
+        // XXX: version
+        return ""//BuildConfig.VERSION_NAME
     }
 
     private fun sendResult(data: Any?, r: MethodChannel.Result) {

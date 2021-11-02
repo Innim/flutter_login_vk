@@ -1,6 +1,8 @@
 ## Next release
 
+* [Android] Update VK SDK version to 3.4.0.
 * Update Gradle, Kotlin and gradle plugin versions.
+
 ## 2.1.0 - 2021-09-28
 
 * [Android] Android implementation rewritten in Kotlin. Thanks to [@baihu92](https://github.com/baihu92).
