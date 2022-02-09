@@ -2,8 +2,8 @@ package ru.innim.flutter_login_vk
 
 import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import com.vk.api.sdk.*
-import com.vk.api.sdk.BuildConfig
 import com.vk.api.sdk.VK.execute
 import com.vk.api.sdk.VK.getUserId
 import com.vk.api.sdk.VK.initialize
@@ -12,7 +12,6 @@ import com.vk.api.sdk.VK.login
 import com.vk.api.sdk.VK.logout
 import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKScope
-import com.vk.api.sdk.utils.DefaultUserAgent
 import com.vk.sdk.api.account.AccountService
 import com.vk.sdk.api.users.UsersService
 import com.vk.sdk.api.users.dto.UsersUserFull
@@ -144,8 +143,9 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
     }
 
     private fun getSdkVersion(): String {
-        // XXX: version
-        return ""//BuildConfig.VERSION_NAME
+        val metaData = context.packageManager.getApplicationInfo(
+                context.packageName, PackageManager.GET_META_DATA)
+        return metaData.metaData["VKSdkVersion"].toString()
     }
 
     private fun sendResult(data: Any?, r: MethodChannel.Result) {
