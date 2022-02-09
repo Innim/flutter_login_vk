@@ -4,6 +4,7 @@
 
 * [Android] Update VK SDK version to 3.5.0.
 * Update Gradle, Kotlin and gradle plugin versions.
+* [Android] **BREAKING** Require min `compileSdkVersion` **31**.
 
 ## 2.1.0 - 2021-09-28
 

@@ -16,7 +16,7 @@ VK SDK version, used in plugin:
 ## Minimum requirements
 
 * iOS **9.0** and higher.
-* Android **5.0** and newer (SDK **21**).
+* Android **5.0** and newer (SDK **21**). Minimum `compileSdkVersion` **31**.
 
 ⚠️  If your project was create with Flutter pre **1.12** you should upgrade it to the Android embedding v2.
 See https://flutter.dev/go/android-project-migration
