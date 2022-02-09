@@ -12,7 +12,7 @@ import com.vk.api.sdk.VK.login
 import com.vk.api.sdk.VK.logout
 import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKScope
-import com.vk.dto.common.id.UserId
+import com.vk.api.sdk.utils.DefaultUserAgent
 import com.vk.sdk.api.account.AccountService
 import com.vk.sdk.api.users.UsersService
 import com.vk.sdk.api.users.dto.UsersUserFull
@@ -67,7 +67,7 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
 
         if (scope != null && isLoggedIn()) {
             val userId = getUserId()
-            execute(AccountService().accountGetAppPermissions(UserId(userId.toLong())), object : VKApiCallback<Int> {
+            execute(AccountService().accountGetAppPermissions(userId), object : VKApiCallback<Int> {
                 override fun success(result: Int) {
                     val list = listOf(*scope.toTypedArray())
                     val vkScopes: List<VKScope> = getScopes(list)
@@ -91,6 +91,7 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
         loginCallback.addPending(result)
         val list = listOf(*scopes.toTypedArray())
         val vkScopes: List<VKScope> = getScopes(list)
+        // TODO: use ActivityResultLauncher
         login(activity!!, vkScopes)
     }
 

@@ -41,6 +41,6 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.vk:android-sdk-core:3.4.0'
-    implementation 'com.vk:android-sdk-api:3.4.0'
+    implementation 'com.vk:android-sdk-core:3.5.0'
+    implementation 'com.vk:android-sdk-api:3.5.0'
 }
