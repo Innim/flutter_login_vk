@@ -2,8 +2,8 @@ package ru.innim.flutter_login_vk
 
 import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import com.vk.api.sdk.*
-import com.vk.api.sdk.BuildConfig
 import com.vk.api.sdk.VK.execute
 import com.vk.api.sdk.VK.getUserId
 import com.vk.api.sdk.VK.initialize
@@ -14,7 +14,7 @@ import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKScope
 import com.vk.sdk.api.account.AccountService
 import com.vk.sdk.api.users.UsersService
-import com.vk.sdk.api.users.dto.UsersUserXtrCounters
+import com.vk.sdk.api.users.dto.UsersUserFull
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import java.util.*
@@ -90,6 +90,14 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
         loginCallback.addPending(result)
         val list = listOf(*scopes.toTypedArray())
         val vkScopes: List<VKScope> = getScopes(list)
+        // TODO: use ActivityResultLauncher
+        // There are multiple problems with this new login approach:
+        // 1. It's requires ComponentActivity, so FlutterActivity is not applicable
+        // 2. We need register login activity at start of the app.
+        // Which is not crucial but looks pretty bad.
+        // 3. Even using FlutterFragmentActivity, we get error
+        // "It's requires ComponentActivity, so FlutterActivity is not applicable" on launch
+        @Suppress("DEPRECATION")
         login(activity!!, vkScopes)
     }
 
@@ -98,7 +106,7 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
         val count = list.size
         for (i in 0 until count) {
             val item = list[i]
-            val scope = VKScope.valueOf(item.toUpperCase(Locale.getDefault()))
+            val scope = VKScope.valueOf(item.uppercase(Locale.getDefault()))
             vkScopes.add(scope)
         }
         return vkScopes
@@ -125,8 +133,8 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
         val fields = VKClient.fieldsDefault
 
         execute(UsersService().usersGet(fields = fields),
-                object : VKApiCallback<List<UsersUserXtrCounters?>?> {
-                    override fun success(result: List<UsersUserXtrCounters?>?) {
+                object : VKApiCallback<List<UsersUserFull?>?> {
+                    override fun success(result: List<UsersUserFull?>?) {
                         if (result != null && result.isNotEmpty() && result[0] != null) {
                             sendResult(Results.userProfile(result[0]!!), r)
                         } else {
@@ -142,7 +150,9 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
     }
 
     private fun getSdkVersion(): String {
-        return BuildConfig.VERSION_NAME
+        val metaData = context.packageManager.getApplicationInfo(
+                context.packageName, PackageManager.GET_META_DATA)
+        return metaData.metaData["VKSdkVersion"].toString()
     }
 
     private fun sendResult(data: Any?, r: MethodChannel.Result) {

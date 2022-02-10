@@ -2,6 +2,7 @@ package ru.innim.flutter_login_vk
 
 import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
+import com.vk.api.sdk.exceptions.VKAuthException
 import io.flutter.plugin.common.MethodChannel
 import java.util.HashMap
 
@@ -19,12 +20,13 @@ class LoginCallback : VKAuthCallback {
         callResult(Results.loginSuccess(token))
     }
 
-    override fun onLoginFailed(errorCode: Int) {
-        if (errorCode == VKAuthCallback.AUTH_CANCELED) {
+    override fun onLoginFailed(authException: VKAuthException) {
+        if (authException.isCanceled) {
             callResult(Results.loginCancelled())
         } else {
+            val errorCode = authException.webViewError
             callError(FlutterError.apiError("Login failed: $errorCode",
-                    VKError(errorCode)))
+                    VKError(errorCode, authException.authError)))
         }
     }
 

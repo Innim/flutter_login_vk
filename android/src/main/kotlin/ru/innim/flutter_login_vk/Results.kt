@@ -2,7 +2,7 @@ package ru.innim.flutter_login_vk
 
 import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.sdk.api.base.dto.BaseBoolInt
-import com.vk.sdk.api.users.dto.UsersUserXtrCounters
+import com.vk.sdk.api.users.dto.UsersUserFull
 import java.util.HashMap
 
 object Results {
@@ -32,9 +32,9 @@ object Results {
         )
     }
 
-    fun userProfile(user: UsersUserXtrCounters): HashMap<String, Any?> {
+    fun userProfile(user: UsersUserFull): HashMap<String, Any?> {
         return hashMapOf(
-                "userId" to user.id!!.value,
+                "userId" to user.id.value,
                 "firstName" to user.firstName,
                 "lastName" to user.lastName,
                 "online" to (user.online == BaseBoolInt.YES),

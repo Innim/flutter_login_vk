@@ -11,12 +11,12 @@ Easily add VK login feature in your application. User profile information includ
 VK SDK version, used in plugin:
 
 * iOS: **^1.6** ([CocoaPods](https://cocoapods.org/pods/VK-ios-sdk))
-* Android: **3.2.2** (Maven [core](https://search.maven.org/artifact/com.vk/android-sdk-core), [api](https://search.maven.org/artifact/com.vk/android-sdk-api))
+* Android: **3.5.0** (Maven [core](https://search.maven.org/artifact/com.vk/android-sdk-core), [api](https://search.maven.org/artifact/com.vk/android-sdk-api))
 
 ## Minimum requirements
 
 * iOS **9.0** and higher.
-* Android **5.0** and newer (SDK **21**).
+* Android **5.0** and newer (SDK **21**). Minimum `compileSdkVersion` **31**.
 
 ⚠️  If your project was create with Flutter pre **1.12** you should upgrade it to the Android embedding v2.
 See https://flutter.dev/go/android-project-migration
