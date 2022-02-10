@@ -91,6 +91,13 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
         val list = listOf(*scopes.toTypedArray())
         val vkScopes: List<VKScope> = getScopes(list)
         // TODO: use ActivityResultLauncher
+        // There are multiple problems with this new login approach:
+        // 1. It's requires ComponentActivity, so FlutterActivity is not applicable
+        // 2. We need register login activity at start of the app.
+        // Which is not crucial but looks pretty bad.
+        // 3. Even using FlutterFragmentActivity, we get error
+        // "It's requires ComponentActivity, so FlutterActivity is not applicable" on launch
+        @Suppress("DEPRECATION")
         login(activity!!, vkScopes)
     }
 
