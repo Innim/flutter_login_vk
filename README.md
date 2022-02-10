@@ -1,6 +1,8 @@
 # flutter_login_vk
 
 [![pub package](https://img.shields.io/pub/v/flutter_login_vk)](https://pub.dartlang.org/packages/flutter_login_vk)
+![Analyze & Test](https://github.com/Innim/flutter_login_vk/actions/workflows/analyze.yml/badge.svg?branch=master)
+[![innim lint](https://img.shields.io/badge/style-innim_lint-40c4ff.svg)](https://pub.dev/packages/innim_lint)
 
 Flutter Plugin to login via VK.com.
 
