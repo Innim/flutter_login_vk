@@ -1,5 +1,9 @@
 ## Next release
 
+## 2.2.1 - 2021-14-02
+
+* [Android] Fix `compileSdkVersion`.
+
 ## 2.2.0 - 2021-11-02
 
 * [Android] Update VK SDK version to 3.5.0.
