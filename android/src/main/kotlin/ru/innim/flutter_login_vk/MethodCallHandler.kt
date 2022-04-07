@@ -12,6 +12,7 @@ import com.vk.api.sdk.VK.login
 import com.vk.api.sdk.VK.logout
 import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKScope
+import com.vk.api.sdk.utils.VKUtils
 import com.vk.sdk.api.account.AccountService
 import com.vk.sdk.api.users.UsersService
 import com.vk.sdk.api.users.dto.UsersUserFull
@@ -27,6 +28,7 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
         private const val getAccessToken = "getAccessToken"
         private const val getUserProfile = "getUserProfile"
         private const val getSdkVersion = "getSdkVersion"
+        private const val getCertificateFingerprint = "getCertificateFingerprint"
         private const val initSdk = "initSdk"
         private const val scopeLoginArg = "scope"
         private const val scopeInitArg = "scope"
@@ -52,6 +54,7 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
                 getAccessToken -> sendResult(getAccessToken(), r)
                 getUserProfile -> getUserProfile(r)
                 getSdkVersion -> sendResult(getSdkVersion(), r)
+                getCertificateFingerprint -> sendResult(getCertificateFingerprint(), r)
                 initSdk -> {
                     val initScope = call.argument<List<String>?>(scopeInitArg)
                     initSdk(initScope, r)
@@ -153,6 +156,11 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
         val metaData = context.packageManager.getApplicationInfo(
                 context.packageName, PackageManager.GET_META_DATA)
         return metaData.metaData["VKSdkVersion"].toString()
+    }
+
+    private fun getCertificateFingerprint(): String? {
+        val fingerprints: Array<String?>? = VKUtils.getCertificateFingerprint(context, context.packageName)
+        return fingerprints?.joinToString()
     }
 
     private fun sendResult(data: Any?, r: MethodChannel.Result) {
