@@ -1,5 +1,9 @@
 ## Next release
 
+## 2.2.1+1 - 2022-11-07
+
+* Migrate to mavenCentral.
+
 ## 2.2.1 - 2021-14-02
 
 * [Android] Fix `compileSdkVersion`.
