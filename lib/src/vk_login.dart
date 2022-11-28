@@ -28,12 +28,12 @@ class VKLogin {
 
   VKLogin({this.debug = false});
 
-  /// Return `true` if SDK initialized.
+  /// Returns `true` if SDK initialized.
   bool get isInitialized => _initialized;
 
-  /// Returns access token if user logged in.
+  /// Returns access token if the user is logged in.
   ///
-  /// If user is now logged in, than returns `null`.
+  /// If the user is not logged in, then returns `null`.
   Future<VKAccessToken?> get accessToken async {
     assert(_initialized,
         'SDK is not initialized. You should call initSdk() first');
