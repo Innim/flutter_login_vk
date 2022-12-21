@@ -99,7 +99,7 @@ class VKLogin {
   ///
   /// If not logged in, than return `null` as a result value.
   ///
-  /// If error occure during request than method
+  /// If error occurs during request than method
   /// will return error result.
   Future<Result<VKUserProfile?>> getUserProfile() async {
     if (await isLoggedIn == false) {
@@ -149,8 +149,8 @@ class VKLogin {
   /// but value property [VKLoginResult.isCanceled] will be `true`
   /// and [VKLoginResult.accessToken] will be `null`.
   ///
-  /// If error occure during log in process, than error result
-  /// will be returned. And [Result.error] may
+  /// If error occurs during log in process, than error result
+  /// will be returned.
   Future<Result<VKLoginResult>> logIn(
       {List<VKScope> scope = const [], List<String>? customScope}) async {
     assert(_initialized,

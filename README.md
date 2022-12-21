@@ -61,7 +61,7 @@ as described in the [documentation](https://vk.com/dev/android_sdk?f=1.1.%20Cert
 Add fingerprints for debug and release certificates. *Note:* if your application uses [Google Play App Signing](https://support.google.com/googleplay/android-developer/answer/7384423) than you should get certificate SHA-1 fingerprint from Google Play Console.
 
     ⚠️ **Important!** You should add fingerprints for every build variants. E.g. if you have CI/CD which build APK for testing
-with it's own cerificate (it may be auto generated debug cetificate or some another) than you should add it's fingerprint too.
+with it's own certificate (it may be auto generated debug certificate or some another) than you should add it's fingerprint too.
 
 4. Click "Save".
 
@@ -190,39 +190,46 @@ final vk = VKLogin();
 await vk.initSdk();
 
 // Log in
-final res = await vk.logIn(permissions: [
+final res = await vk.logIn(scope: [
   VKScope.email,
   VKScope.friends,
 ]);
 
 // Check result
 if (res.isValue) {
-    // There is no error, but we don't know yet
-    // if user loggen in or not.
-    // You should check isCanceled
-    final VKLoginResult data = res.asValue.value;
+  // There is no error, but we don't know yet
+  // if user logged in or not.
+  // You should check isCanceled
+  final VKLoginResult result = res.asValue!.value;
 
-    if (res.isCanceled) {
-        // User cancel log in
-    } else {
-        // Logged in
+  if (result.isCanceled) {
+    // User cancel log in
+  } else {
+    // Logged in
 
-        // Send access token to server for validation and auth
-        final VKAccessToken accessToken = res.accessToken;
-        print('Access token: ${accessToken.token}');
-    
-        // Get profile data
-        final profile = await fb.getUserProfile();
+    // Send access token to server for validation and auth
+    final VKAccessToken? accessToken = result.accessToken;
+    if (accessToken != null) {
+      print('Access token: ${accessToken.token}');
+
+      // Get profile data
+      final profileRes = await vk.getUserProfile();
+      final profile = profileRes.asValue?.value;
+      if (profile != null) {
         print('Hello, ${profile.firstName}! You ID: ${profile.userId}');
+      }
 
-        // Get email (since we request email permissions)
-        final email = await fb.getUserEmail();
-        print('And your email is $email');
+      // Get email (since we request email permissions)
+      final email = await vk.getUserEmail();
+      print('And your email is $email');
+    } else {
+      print('Something goes wrong');
     }
+  }
 } else {
-    // Log in failed
-    final errorRes = res.asError;
-    print('Error while log in: ${errorRes.error}');
+  // Log in failed
+  final errorRes = res.asError!;
+  print('Error while log in: ${errorRes.error}');
 }
 ```
 
