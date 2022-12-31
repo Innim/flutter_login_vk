@@ -106,7 +106,7 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
         val count = list.size
         for (i in 0 until count) {
             val item = list[i]
-            val scope = VKScope.valueOf(item.uppercase(Locale.getDefault()))
+            val scope = VKScope.valueOf(item.uppercase(Locale.ENGLISH))
             vkScopes.add(scope)
         }
         return vkScopes

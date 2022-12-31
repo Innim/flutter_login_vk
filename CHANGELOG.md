@@ -1,5 +1,9 @@
 ## Next release
 
+## 2.2.2
+
+* **Fixed**: Exception when login with `email` scope in Turkish. Thanks to [@gadgetreviews](https://github.com/gadgetreviews).
+
 ## 2.2.1+2
 
 * Fixed README.
