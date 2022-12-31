@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/flutter_login_vk.iml" filepath="$PROJECT_DIR$/flutter_login_vk.iml" group="flutter_login_vk" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/flutter_login_vk.iml" filepath="$PROJECT_DIR$/.idea/modules/flutter_login_vk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/flutter_login_vk.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/flutter_login_vk.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/flutter_login_vk.main.iml" filepath="$PROJECT_DIR$/.idea/modules/flutter_login_vk.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/flutter_login_vk.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/flutter_login_vk.unitTest.iml" />
     </modules>
   </component>
 </project>
