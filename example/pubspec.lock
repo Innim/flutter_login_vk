@@ -33,7 +33,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.2.1"
+    version: "2.2.2+1"
   innim_lint:
     dependency: "direct dev"
     description:
