@@ -57,7 +57,7 @@ An application will be created. Now select tab "Settings" and copy "App ID"
 2. Set `Main activity for Android` - your main activity class (with package). By default it would be `com.yourcompany.yourapp.MainActivity`.
 3. To fill up `Signing certificate fingerprint for Android` you should create SHA1 fingerprint
 as described in the [documentation](https://vk.com/dev/android_sdk?f=1.1.%20Certificate%20Fingerprint) 
-(without `SHA1: ` prefix).
+(without `SHA1: ` prefix). **Pay attention**: you should remove all colons from the fingerprint string.
 Add fingerprints for debug and release certificates. *Note:* if your application uses [Google Play App Signing](https://support.google.com/googleplay/android-developer/answer/7384423) than you should get certificate SHA-1 fingerprint from Google Play Console.
 
     ⚠️ **Important!** You should add fingerprints for every build variants. E.g. if you have CI/CD which build APK for testing
