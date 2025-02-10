@@ -1,7 +1,7 @@
 import 'package:async/async.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_login_vk/flutter_login_vk.dart';
+import 'package:flutter_support_login_vk/flutter_support_login_vk.dart';
 
 /// Class for implementing login via VK.
 class VKLogin {

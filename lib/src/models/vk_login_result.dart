@@ -1,4 +1,4 @@
-import 'package:flutter_login_vk/flutter_login_vk.dart';
+import 'package:flutter_support_login_vk/flutter_support_login_vk.dart';
 
 /// Result for login request.
 class VKLoginResult {

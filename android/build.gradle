@@ -1,4 +1,6 @@
-group 'ru.innim.flutter_login_vk'
+package android
+
+group 'com.tashtemirlan.flutter_login_vk'
 version '1.1'
 
 buildscript {
@@ -26,6 +28,16 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 31
+    namespace "com.tashtemirlan.flutter_login_vk"
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
