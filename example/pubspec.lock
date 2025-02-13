@@ -36,15 +36,15 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.0.0"
+    version: "2.2.2+1"
   innim_lint:
     dependency: "direct dev"
     description:
       name: innim_lint
-      sha256: eea77fe3e939f9d1281cf154dbb35870e407168a7857c555ba0444d730d9ff8f
+      sha256: "9f88770b0137f71735c14d18afe70ef0d53fe4a0fffb90c1dc37adefe399f74a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.0"
+    version: "0.5.0+1"
   material_color_utilities:
     dependency: transitive
     description:
@@ -61,14 +61,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.15.0"
-  pedantic:
-    dependency: transitive
-    description:
-      name: pedantic
-      sha256: "67fc27ed9639506c856c840ccce7594d0bdcd91bc8d53d6e52359449a1d50602"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.11.1"
   sky_engine:
     dependency: transitive
     description: flutter

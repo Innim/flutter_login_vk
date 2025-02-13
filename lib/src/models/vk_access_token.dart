@@ -9,8 +9,10 @@ class VKAccessToken {
   VKAccessToken.fromMap(Map<String, dynamic> map)
       : token = map['token'] as String,
         userId = map['userId'] as String,
-        created = DateTime.fromMillisecondsSinceEpoch(map['created'] as int,
-            isUtc: true),
+        created = DateTime.fromMillisecondsSinceEpoch(
+          map['created'] as int,
+          isUtc: true,
+        ),
         secret = map['secret'] as String?,
         email = map['email'] as String?;
 

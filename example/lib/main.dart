@@ -12,7 +12,7 @@ class MyApp extends StatefulWidget {
   MyApp({Key? key}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -54,12 +54,12 @@ class _MyAppState extends State<MyApp> {
                     ),
                   isLogin
                       ? OutlinedButton(
-                          child: const Text('Log Out'),
                           onPressed: _onPressedLogOutButton,
+                          child: const Text('Log Out'),
                         )
                       : OutlinedButton(
+                          onPressed: _onPressedLogInButton,
                           child: const Text('Log In'),
-                          onPressed: () => _onPressedLogInButton(context),
                         ),
                 ],
               ),
@@ -70,8 +70,12 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Widget _buildUserInfo(BuildContext context, VKUserProfile profile,
-      VKAccessToken accessToken, String? email) {
+  Widget _buildUserInfo(
+    BuildContext context,
+    VKUserProfile profile,
+    VKAccessToken accessToken,
+    String? email,
+  ) {
     final photoUrl = profile.photo200;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,17 +101,21 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Future<void> _onPressedLogInButton(BuildContext context) async {
-    final res = await widget.plugin.logIn(scope: [
-      VKScope.email,
-    ]);
+  Future<void> _onPressedLogInButton() async {
+    final res = await widget.plugin.logIn(
+      scope: [
+        VKScope.email,
+      ],
+    );
 
     if (res.isError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Log In failed: ${res.asError!.error}'),
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Log In failed: ${res.asError!.error}'),
+          ),
+        );
+      }
     } else {
       final loginResult = res.asValue!.value;
       if (!loginResult.isCanceled) await _updateLoginInfo();

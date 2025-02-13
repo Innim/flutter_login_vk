@@ -6,5 +6,10 @@
   "files.watcherExclude": {
     "**/.fvm": true
   },
-  "cSpell.words": []
+  "cSpell.words": [
+    "nohttps",
+    "vkauthorize",
+    "yourapp",
+    "yourcompany"
+  ]
 }

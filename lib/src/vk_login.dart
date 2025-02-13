@@ -35,8 +35,10 @@ class VKLogin {
   ///
   /// If the user is not logged in, then returns `null`.
   Future<VKAccessToken?> get accessToken async {
-    assert(_initialized,
-        'SDK is not initialized. You should call initSdk() first');
+    assert(
+      _initialized,
+      'SDK is not initialized. You should call initSdk() first',
+    );
     if (!_initialized) return null;
 
     final tokenResult = await _channel
@@ -68,8 +70,10 @@ class VKLogin {
   /// You can pass [scope] (and/or [customScope], see [logIn])
   /// to require listed permissions. If user logged in,
   /// but doesn't have all of this permissions - he will be logged out.
-  Future<Result<bool>> initSdk(
-      {List<VKScope>? scope, List<String>? customScope}) async {
+  Future<Result<bool>> initSdk({
+    List<VKScope>? scope,
+    List<String>? customScope,
+  }) async {
     final scopeArg = _getScope(scope: scope, customScope: customScope);
 
     if (debug) {
@@ -102,7 +106,7 @@ class VKLogin {
   /// If error occurs during request than method
   /// will return error result.
   Future<Result<VKUserProfile?>> getUserProfile() async {
-    if (await isLoggedIn == false) {
+    if (!(await isLoggedIn)) {
       if (debug) _log('Not logged in. User profile is null');
       return Result.value(null);
     }
@@ -113,9 +117,11 @@ class VKLogin {
 
       if (debug) _log('User profile: $result');
 
-      return Result.value(result != null
-          ? VKUserProfile.fromMap(result.cast<String, dynamic>())
-          : null);
+      return Result.value(
+        result != null
+            ? VKUserProfile.fromMap(result.cast<String, dynamic>())
+            : null,
+      );
     } on PlatformException catch (e) {
       if (debug) _log('Get profile error: $e');
       return Result.error(e);
@@ -151,10 +157,14 @@ class VKLogin {
   ///
   /// If error occurs during log in process, than error result
   /// will be returned.
-  Future<Result<VKLoginResult>> logIn(
-      {List<VKScope> scope = const [], List<String>? customScope}) async {
-    assert(_initialized,
-        'SDK is not initialized. You should call initSdk() first');
+  Future<Result<VKLoginResult>> logIn({
+    List<VKScope> scope = const [],
+    List<String>? customScope,
+  }) async {
+    assert(
+      _initialized,
+      'SDK is not initialized. You should call initSdk() first',
+    );
     if (!_initialized) throw Exception('SDK is not initialized.');
 
     final scopeArg = _getScope(scope: scope, customScope: customScope);
@@ -163,7 +173,9 @@ class VKLogin {
 
     try {
       final res = await _channel.invokeMethod<Map<dynamic, dynamic>>(
-          _methodLogIn, {_argLogInScope: scopeArg});
+        _methodLogIn,
+        {_argLogInScope: scopeArg},
+      );
 
       if (res == null) {
         return Result.error('Invalid null result');
@@ -177,8 +189,10 @@ class VKLogin {
   }
 
   Future<void> logOut() async {
-    assert(_initialized,
-        'SDK is not initialized. You should call initSdk() first');
+    assert(
+      _initialized,
+      'SDK is not initialized. You should call initSdk() first',
+    );
     if (!_initialized) return;
 
     if (debug) _log('Log Out');

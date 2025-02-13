@@ -1,5 +1,3 @@
-library flutter_login_vk;
-
 export './src/models/vk_access_token.dart';
 export './src/models/vk_error.dart';
 export './src/models/vk_login_result.dart';

@@ -17,7 +17,8 @@ class VKLoginResult {
         accessToken = map['accessToken'] != null
             ? VKAccessToken.fromMap(
                 (map['accessToken'] as Map<dynamic, dynamic>)
-                    .cast<String, dynamic>())
+                    .cast<String, dynamic>(),
+              )
             : null;
 
   Map<String, dynamic> toMap() {
