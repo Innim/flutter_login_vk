@@ -1,0 +1,15 @@
+{
+  "dart.flutterSdkPath": ".fvm/versions/3.27.1",
+  "search.exclude": {
+    "**/.fvm": true
+  },
+  "files.watcherExclude": {
+    "**/.fvm": true
+  },
+  "cSpell.words": [
+    "nohttps",
+    "vkauthorize",
+    "yourapp",
+    "yourcompany"
+  ]
+}

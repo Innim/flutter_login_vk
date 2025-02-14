@@ -1,5 +1,11 @@
 ## Next release
 
+## 3.0.0
+
+* [Android] Update compile SDK (34), Java (11), AGP (8.5.1), Kotlin (1.8.10).
+* Use Flutter 3.27.1 and new FVM configuration.
+* [Example] Update android build files.
+
 ## 2.2.2+1
 
 * Minor README update.

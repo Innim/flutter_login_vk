@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_login_vk'
-  s.version          = '0.1.0'
+  s.version          = '3.0.0'
   s.summary          = 'Flutter login via VK.'
   s.description      = <<-DESC
 Login via VK.com for a Flutter app.
