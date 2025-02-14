@@ -15,9 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Dart and Flutter Package Publisher
-        uses: k-paxian/dart-package-publisher@v1.5.1
+        uses: k-paxian/dart-package-publisher@v1.6
         with:
           accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
           refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
           skipTests: true
           flutter: true
+          flutterBranch: 3.27.1
