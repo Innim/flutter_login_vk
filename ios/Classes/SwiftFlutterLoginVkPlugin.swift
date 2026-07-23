@@ -135,8 +135,6 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin, FlutterSceneLif
                     message: "Init failed with unhandled state: \(state)", error: error))
             }
         }
-        
-        result(true)
     }
     
     private func logIn(result: @escaping FlutterResult, permissions: [String]) {
@@ -272,8 +270,19 @@ class VkLogInDelegate : NSObject, VKSdkDelegate {
     }
     
     func vkSdkUserAuthorizationFailed() {
-        // TODO: should notify application
-        print("vkSdkUserAuthorizationFailed")
+        // The SDK reports the failure only through this method, so a pending
+        // call has to be completed here - otherwise it never returns.
+        let error = FlutterError.authorizationFailed("User authorization failed")
+
+        if let pendingResult = _pendingLoginResult {
+            _pendingLoginResult = nil
+            pendingResult(error)
+        }
+
+        if let pendingResult = _pendingInitResult {
+            _pendingInitResult = nil
+            pendingResult(error)
+        }
     }
     
     // VKSdkDelegate
@@ -393,6 +402,11 @@ extension FlutterError {
     /// No connection to Internet.
     static func noConnection(_ message: String, details: Any? = nil) -> FlutterError {
         return FlutterError(code: "NO_CONNECTION", message: message, details: details);
+    }
+
+    /// User authorization failed, no error data provided by the SDK.
+    static func authorizationFailed(_ message: String, details: Any? = nil) -> FlutterError {
+        return FlutterError(code: "AUTHORIZATION_FAILED", message: message, details: details);
     }
     
     /// Error as result of SDK API call.

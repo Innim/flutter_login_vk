@@ -7,6 +7,10 @@
 handle redirect from the VK app in `scene:openURLContexts:` 
 and look up a view controller to present SDK UI in the connected scenes. 
 Without it log in never completes in an app with `UISceneDelegate` adopted.
+* [iOS] **Fixed**: log in never completes if authorization failed 
+(`vkSdkUserAuthorizationFailed`).
+* [iOS] **Fixed**: result of `initSdk()` was sent twice, 
+so an initialization error was ignored.
 
 ## 3.0.0
 
