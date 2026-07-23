@@ -9,7 +9,7 @@ void main() {
 class MyApp extends StatefulWidget {
   final plugin = VKLogin(debug: true);
 
-  MyApp({Key? key}) : super(key: key);
+  MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
