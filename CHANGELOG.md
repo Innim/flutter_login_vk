@@ -11,6 +11,9 @@ Without it log in never completes in an app with `UISceneDelegate` adopted.
 (`vkSdkUserAuthorizationFailed`).
 * [iOS] **Fixed**: result of `initSdk()` was sent twice, 
 so an initialization error was ignored.
+* [Android] **Fixed**: log in always failed if the stored access token 
+is not valid anymore (expired or revoked). Such a token is dropped 
+during `initSdk()` now.
 
 ## 3.0.0
 
