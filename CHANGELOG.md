@@ -1,5 +1,13 @@
 ## Next release
 
+## 3.1.0
+
+* **BREAKING** Require Flutter `3.38.0` and iOS `13.0`.
+* [iOS] Support UIKit's scene-based life cycle: 
+handle redirect from the VK app in `scene:openURLContexts:` 
+and look up a view controller to present SDK UI in the connected scenes. 
+Without it log in never completes in an app with `UISceneDelegate` adopted.
+
 ## 3.0.0
 
 * [Android] Update compile SDK (34), Java (11), AGP (8.5.1), Kotlin (1.8.10).
