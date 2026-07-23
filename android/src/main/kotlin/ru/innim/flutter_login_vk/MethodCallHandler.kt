@@ -17,6 +17,7 @@ import com.vk.sdk.api.users.UsersService
 import com.vk.sdk.api.users.dto.UsersUserFull
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import java.io.IOException
 import java.util.*
 
 class MethodCallHandler(private val context: Context, private val loginCallback: LoginCallback)
@@ -77,8 +78,19 @@ class MethodCallHandler(private val context: Context, private val loginCallback:
                 }
 
                 override fun fail(error: Exception) {
-                    sendError(FlutterError.apiError("Get profile permissions error: " + error.message,
-                            VKError(0, error.message.toString())), channelResult)
+                    // The permissions are requested with the stored access token,
+                    // so the request fails if that token is not valid anymore
+                    // (expired or revoked). Such a token is dropped to log in from
+                    // a clean state - otherwise every next login attempt fails
+                    // until the app data is cleared.
+                    // Connection problems shouldn't reset the stored token.
+                    if (error !is IOException) {
+                        logout()
+                    }
+
+                    // Init itself is not failed by this check: it's just
+                    // an optional validation of the stored token.
+                    sendResult(true, channelResult)
                 }
             })
         } else {

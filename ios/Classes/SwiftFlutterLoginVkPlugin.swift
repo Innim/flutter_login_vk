@@ -17,13 +17,14 @@ enum LogInArg: String {
     case scope
 }
 
-public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
+public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin, FlutterSceneLifeCycleDelegate {
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "flutter_login_vk", binaryMessenger: registrar.messenger())
         let instance = SwiftFlutterLoginVkPlugin()
-        
+
         registrar.addMethodCallDelegate(instance, channel: channel)
         registrar.addApplicationDelegate(instance)
+        registrar.addSceneDelegate(instance)
     }
     
     private lazy var _uiDelegate = VkUIDelegate()
@@ -77,13 +78,28 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
     }
     
     // Application delegate
-    
+
     public func application(_ application: UIApplication, open url: URL,
                             options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String
         return VKSdk.processOpen(url, fromApplication: sourceApplication)
     }
-    
+
+    // Scene delegate
+    //
+    // Apps using the UIScene life-cycle don't call the application delegate
+    // method above, so the redirect back from the VK app has to be handled here.
+
+    public func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) -> Bool {
+        for context in URLContexts {
+            if VKSdk.processOpen(context.url, fromApplication: context.options.sourceApplication) {
+                return true
+            }
+        }
+
+        return false
+    }
+
     // Plugin methods impl
     
     private func initSdk(result: @escaping FlutterResult, appId: String, permissions: [String]?) {
@@ -119,8 +135,6 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
                     message: "Init failed with unhandled state: \(state)", error: error))
             }
         }
-        
-        result(true)
     }
     
     private func logIn(result: @escaping FlutterResult, permissions: [String]) {
@@ -183,13 +197,38 @@ public class SwiftFlutterLoginVkPlugin: NSObject, FlutterPlugin {
 }
 
 class VkUIDelegate : NSObject, VKSdkUIDelegate {
+    /// A view controller to present the SDK UI from.
+    ///
+    /// Under the UIScene life-cycle UIKit doesn't fill in the application
+    /// delegate's window, so the window is looked up in the connected scenes
+    /// first, and only then in the application delegate.
     private var rootViewController: UIViewController? {
         get {
-            let app = UIApplication.shared
-            return app.delegate?.window??.rootViewController
+            let window = keyWindow ?? UIApplication.shared.delegate?.window ?? nil
+
+            guard var controller = window?.rootViewController else { return nil }
+
+            // Presenting from a controller that already presents another one
+            // does nothing, so the topmost one is used.
+            while let presented = controller.presentedViewController, !presented.isBeingDismissed {
+                controller = presented
+            }
+
+            return controller
         }
     }
-    
+
+    private var keyWindow: UIWindow? {
+        get {
+            let scenes = UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+
+            let activeScene = scenes.first { $0.activationState == .foregroundActive } ?? scenes.first
+
+            return activeScene?.windows.first { $0.isKeyWindow } ?? activeScene?.windows.first
+        }
+    }
+
     func vkSdkShouldPresent(_ controller: UIViewController!) {
         guard let vc = rootViewController else {
             // TODO: log error
@@ -231,8 +270,19 @@ class VkLogInDelegate : NSObject, VKSdkDelegate {
     }
     
     func vkSdkUserAuthorizationFailed() {
-        // TODO: should notify application
-        print("vkSdkUserAuthorizationFailed")
+        // The SDK reports the failure only through this method, so a pending
+        // call has to be completed here - otherwise it never returns.
+        let error = FlutterError.authorizationFailed("User authorization failed")
+
+        if let pendingResult = _pendingLoginResult {
+            _pendingLoginResult = nil
+            pendingResult(error)
+        }
+
+        if let pendingResult = _pendingInitResult {
+            _pendingInitResult = nil
+            pendingResult(error)
+        }
     }
     
     // VKSdkDelegate
@@ -352,6 +402,11 @@ extension FlutterError {
     /// No connection to Internet.
     static func noConnection(_ message: String, details: Any? = nil) -> FlutterError {
         return FlutterError(code: "NO_CONNECTION", message: message, details: details);
+    }
+
+    /// User authorization failed, no error data provided by the SDK.
+    static func authorizationFailed(_ message: String, details: Any? = nil) -> FlutterError {
+        return FlutterError(code: "AUTHORIZATION_FAILED", message: message, details: details);
     }
     
     /// Error as result of SDK API call.
