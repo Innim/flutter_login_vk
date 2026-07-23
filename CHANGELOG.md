@@ -1,8 +1,11 @@
 ## Next release
 
-## 3.1.0
+## 4.0.0
 
-* **BREAKING** Require Flutter `3.38.0` and iOS `13.0`.
+* **BREAKING** Require Flutter `3.38.0` (Dart `3.10.0`) and iOS `13.0`.
+* **BREAKING** `initSdk()` can return an error now. 
+Previously the result was sent twice and a successful one was almost always 
+the first, so an initialization error was ignored.
 * [iOS] Support UIKit's scene-based life cycle: 
 handle redirect from the VK app in `scene:openURLContexts:` 
 and look up a view controller to present SDK UI in the connected scenes. 
@@ -10,7 +13,7 @@ Without it log in never completes in an app with `UISceneDelegate` adopted.
 * [iOS] **Fixed**: log in never completes if authorization failed 
 (`vkSdkUserAuthorizationFailed`).
 * [iOS] **Fixed**: result of `initSdk()` was sent twice, 
-so an initialization error was ignored.
+so an initialization error was ignored (see the breaking change above).
 * [Android] **Fixed**: log in always failed if the stored access token 
 is not valid anymore (expired or revoked). Such a token is dropped 
 during `initSdk()` now.
